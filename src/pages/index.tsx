@@ -1,5 +1,11 @@
+import { useState } from "react";
 import styled from "styled-components";
+import { Octokit } from "octokit";
+
 import { Header } from "../components/Header";
+import { useFetch } from "../hooks/useFetch";
+
+const octokitClient = new Octokit();
 
 const PageContent = styled.div`
   flex: 1;
@@ -26,7 +32,7 @@ const Form = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
 `;
@@ -48,6 +54,22 @@ const Input = styled.input`
 `;
 
 const LandingPage = () => {
+  const [organization, setOrganization] = useState("");
+
+  const { data, loading, error } = useFetch(
+    ["orgRepositories", organization],
+    async () => {
+      if (organization.length < 3) return;
+
+      return octokitClient.rest.repos
+        .listForOrg({ org: organization })
+        .then((response) => response.data);
+    },
+    {
+      debounce: 500,
+    }
+  );
+
   return (
     <>
       <Header />
@@ -56,7 +78,12 @@ const LandingPage = () => {
           <Title>Details</Title>
           <InputContainer>
             <Label htmlFor="organization-input">Organization</Label>
-            <Input id="organization-input" type="text" />
+            <Input
+              id="organization-input"
+              type="text"
+              value={organization}
+              onChange={(event) => setOrganization(event.currentTarget.value)}
+            />
           </InputContainer>
         </Form>
       </PageContent>
