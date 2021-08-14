@@ -42,6 +42,7 @@ const useFetch = <T, ErrorT = Error>(
         } catch (error) {
           setError(error);
           setData(undefined);
+          setLoading(false);
         }
       };
 
