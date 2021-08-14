@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { Octokit } from "octokit";
+import { Link } from "react-router-dom";
 
 import { Header } from "../components/Header";
 import { useFetch } from "../hooks/useFetch";
@@ -40,6 +41,14 @@ const Title = styled.h1`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  &:disabled {
+    background: rgba(32, 33, 37, 0.12);
+  }
 `;
 
 const Label = styled.label`
@@ -53,8 +62,28 @@ const Input = styled.input`
   border: 1px solid var(--border-color);
 `;
 
+const Select = styled.select`
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+`;
+
+const Button = styled(Link)`
+  width: fit-content;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 600;
+
+  align-self: center;
+`;
+
 const LandingPage = () => {
   const [organization, setOrganization] = useState("");
+  const [repository, setRepository] = useState<string>();
 
   const { data, loading, error } = useFetch(
     ["orgRepositories", organization],
@@ -85,6 +114,36 @@ const LandingPage = () => {
               onChange={(event) => setOrganization(event.currentTarget.value)}
             />
           </InputContainer>
+
+          <InputContainer>
+            <Label>Repository</Label>
+            <Select
+              disabled={typeof data === "undefined"}
+              onChange={(event) => setRepository(event.target.value)}
+              value={repository}
+            >
+              <option disabled selected>
+                Select repository...
+              </option>
+
+              {data?.map((repository) => (
+                <option key={repository.id} value={repository.name}>
+                  {repository.name}
+                </option>
+              ))}
+            </Select>
+          </InputContainer>
+
+          {organization && repository && (
+            <Button
+              aria-live="polite"
+              to={{
+                pathname: `/${organization}/${repository}`,
+              }}
+            >
+              Browse Issues
+            </Button>
+          )}
         </Form>
       </PageContent>
     </>
