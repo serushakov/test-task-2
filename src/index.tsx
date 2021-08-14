@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   /**
-    Make sure padding does not affect element width;
+    Make sure padding does not affect element width.
 
     @see: https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing
   */

@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@types/history": "^4.7.9",
     "@types/react-router-dom": "^5.1.8",
     "@types/styled-components": "^5.1.12"
   }

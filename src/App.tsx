@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Route, BrowserRouter } from "react-router-dom";
 
 import { Octokit } from "octokit";
+import { LandingPage } from "./pages";
 
 const octokitClient = new Octokit();
 
@@ -14,7 +15,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Route path="/"></Route>
+      <Route path="/">
+        <LandingPage />
+      </Route>
     </BrowserRouter>
   );
 }
