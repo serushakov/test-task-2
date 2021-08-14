@@ -35,6 +35,16 @@ const GlobalStyle = createGlobalStyle`
 
     color: var(--text-color);
     background: var(--surface-color);
+
+    display:flex;
+    flex-direction: column;
+  }
+
+  #root {
+    flex: 1;
+
+    display:flex;
+    flex-direction: column;
   }
 
   :root {
