@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { debounce } from "lodash";
 
 interface Options {
   debounce?: number;
@@ -43,11 +44,22 @@ const useFetch = <T, ErrorT = Error>(
         }
       };
 
-      doFetch();
+      if (options?.debounce) {
+        const doFetchDebounced = debounce(doFetch, options.debounce);
 
-      return () => {
-        ignore.current = true;
-      };
+        doFetchDebounced();
+
+        return () => {
+          doFetchDebounced.cancel();
+          ignore.current = true;
+        };
+      } else {
+        doFetch();
+
+        return () => {
+          ignore.current = true;
+        };
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     typeof key === "string" ? [key] : key
