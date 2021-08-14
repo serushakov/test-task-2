@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import { Header } from "../components/Header";
 import { useFetch } from "../hooks/useFetch";
+import { Loader } from "react-feather";
 
 const octokitClient = new Octokit();
 
@@ -24,9 +25,9 @@ const Form = styled.div`
   flex: 1;
 
   max-width: 30rem;
-  border: 1px solid var(--border-color);
   border-radius: 1rem;
   padding: 2rem;
+  box-shadow: 0 4px 12px 2px rgba(32, 33, 37, 0.06);
 
   display: flex;
   flex-direction: column;
@@ -56,10 +57,44 @@ const Label = styled.label`
   margin-bottom: 0.5rem;
 `;
 
+const InputFieldWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
 const Input = styled.input`
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid var(--border-color);
+  width: 100%;
+`;
+
+const StyledLoader = styled(Loader)`
+  position: absolute;
+  top: 50%;
+  inset-inline-end: 0.5rem;
+  transform: translate(0, -50%);
+  animation: rotate forwards 1s linear infinite, appear forwards 0.15s;
+
+  @keyframes appear {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: translate(0, -50%) rotate(0deg);
+    }
+
+    100% {
+      transform: translate(0, -50%) rotate(360deg);
+    }
+  }
 `;
 
 const Select = styled.select`
@@ -107,12 +142,16 @@ const LandingPage = () => {
           <Title>Details</Title>
           <InputContainer>
             <Label htmlFor="organization-input">Organization</Label>
-            <Input
-              id="organization-input"
-              type="text"
-              value={organization}
-              onChange={(event) => setOrganization(event.currentTarget.value)}
-            />
+
+            <InputFieldWrapper>
+              <Input
+                id="organization-input"
+                type="text"
+                value={organization}
+                onChange={(event) => setOrganization(event.currentTarget.value)}
+              />
+              {loading && <StyledLoader />}
+            </InputFieldWrapper>
           </InputContainer>
 
           <InputContainer>
