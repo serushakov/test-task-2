@@ -6,7 +6,7 @@ interface Options {
 }
 
 const useFetch = <T, ErrorT = Error>(
-  key: string | Array<string>,
+  key: string | Array<unknown>,
   fetchFunction: () => Promise<T>,
   options?: Options
 ) => {
