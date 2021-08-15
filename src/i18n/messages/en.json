@@ -1,0 +1,3 @@
+{
+  "issue-table.issue.description": "#{number} opened on {date} by {author}"
+}
