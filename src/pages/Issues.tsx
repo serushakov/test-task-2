@@ -21,7 +21,7 @@ const PageContent = styled.div`
   flex: 1;
   max-width: var(--content-width);
   width: 100%;
-  padding: 4rem var(--side-padding) 0;
+  padding: 4rem var(--side-padding);
   margin: 0 auto;
 `;
 

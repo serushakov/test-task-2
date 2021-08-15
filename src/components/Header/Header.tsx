@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const Root = styled.header`
   height: 4rem;
-  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(32, 33, 37, 0.06);
 `;
 
 const WidthContainer = styled.div`
