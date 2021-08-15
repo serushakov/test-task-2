@@ -15,12 +15,8 @@ const PageContent = styled.div`
   flex: 1;
   max-width: var(--content-width);
   width: 100%;
-  padding: 0 var(--side-padding);
+  padding: 4rem var(--side-padding) 0;
   margin: 0 auto;
-
-  display: flex;
-  justify-content: center;
-  align-items: center; ;
 `;
 
 const links = [{ label: "Choose another repository", to: { pathname: "/" } }];
@@ -125,9 +121,7 @@ const Issues = ({
                 comments,
                 state,
                 author: user?.login ?? "unknown",
-                link: {
-                  pathname: `/${organization}/${repository}/issues/${number}`,
-                },
+                link: `/${organization}/${repository}/issues/${number}`,
               })
             )}
             page={page}

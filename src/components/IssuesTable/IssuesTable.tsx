@@ -1,6 +1,9 @@
-import { LocationDescriptor, LocationDescriptorObject } from "history";
+import { LocationDescriptor } from "history";
+import styled from "styled-components";
 import { IssueStateFilter } from "../../common";
+import { IssueItem } from "./IssueItem";
 import { Pagination } from "../Pagination";
+import { Issue } from "./types";
 
 const ISSUE_STATES = [
   IssueStateFilter.open,
@@ -8,15 +11,38 @@ const ISSUE_STATES = [
   IssueStateFilter.all,
 ];
 
-type Issue = {
-  title: string;
-  state: string;
-  id: number;
-  author: string;
-  number: number;
-  comments: number;
-  link: LocationDescriptorObject;
-};
+const Root = styled.div`
+  width: 100%;
+  box-shadow: 0 4px 12px 2px rgba(32, 33, 37, 0.06);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-rows: 3rem auto 3rem;
+`;
+
+const FilterRow = styled.div`
+  width: 100%;
+  border-bottom: 1px solid var(--border-color);
+`;
+
+const PaginationRow = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+`;
+
+const IssueListItem = styled.li`
+  &:nth-child(even) {
+    background: rgba(32, 33, 37, 0.06);
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+  }
+`;
 
 interface Props {
   stateFilter: IssueStateFilter;
@@ -29,16 +55,23 @@ interface Props {
 
 const IssuesTable = ({ issues, pages, page, pageLinkCreator }: Props) => {
   return (
-    <div>
+    <Root>
+      <FilterRow></FilterRow>
       <ul>
         {issues.map((issue) => (
-          <li key={issue.id}>
-            {issue.title} by {issue.author}
-          </li>
+          <IssueListItem key={issue.id}>
+            <IssueItem {...issue} />
+          </IssueListItem>
         ))}
       </ul>
-      <Pagination page={page} pages={pages} pageLinkCreator={pageLinkCreator} />
-    </div>
+      <PaginationRow>
+        <Pagination
+          page={page}
+          pages={pages}
+          pageLinkCreator={pageLinkCreator}
+        />
+      </PaginationRow>
+    </Root>
   );
 };
 
