@@ -7,7 +7,11 @@ import { Header } from "../components/Header";
 import { useFetch } from "../hooks/useFetch";
 import { IssuesTable } from "../components/IssuesTable";
 
-import { IssueStateFilter } from "../common";
+import {
+  IssueSortingOption,
+  IssueStateFilter,
+  IssueSortingDirection,
+} from "../common";
 
 const octokitClient = new Octokit();
 
@@ -68,6 +72,13 @@ const Issues = ({
   const [stateFilter, setStateFilter] = useState<IssueStateFilter>(
     IssueStateFilter.open
   );
+  const [sorting, setSorting] = useState<IssueSortingOption>(
+    IssueSortingOption.created
+  );
+  const [sortDirection, setSortDirection] = useState<IssueSortingDirection>(
+    IssueSortingDirection.desc
+  );
+
   const [pages, setPages] = useState<number>();
 
   const page = useMemo(() => {
@@ -81,7 +92,15 @@ const Issues = ({
   }, [search]);
 
   const { data } = useFetch(
-    ["issues", organization, repository, page, stateFilter],
+    [
+      "issues",
+      organization,
+      repository,
+      page,
+      stateFilter,
+      sorting,
+      sortDirection,
+    ],
     async () => {
       const {
         data: issues,
@@ -91,6 +110,8 @@ const Issues = ({
         repo: repository,
         state: stateFilter,
         page,
+        sort: sorting,
+        direction: sortDirection,
       });
 
       return { issues, linkHeader: link };
@@ -125,13 +146,17 @@ const Issues = ({
                 date: new Date(created_at),
               })
             )}
+            stateFilter={stateFilter}
+            onStateFilterChange={setStateFilter}
+            sorting={sorting}
+            onSortingChange={setSorting}
+            sortDirection={sortDirection}
+            onSortDirectionChange={setSortDirection}
             page={page}
             pageLinkCreator={(page) =>
               `/${organization}/${repository}?page=${page}`
             }
             pages={pages ?? 0}
-            stateFilter={stateFilter}
-            onStateFilterChange={setStateFilter}
           />
         )}
       </PageContent>

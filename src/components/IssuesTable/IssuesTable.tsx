@@ -1,27 +1,17 @@
 import { LocationDescriptor } from "history";
 import styled from "styled-components";
-import { IssueStateFilter } from "../../common";
+import {
+  IssueSortingOption,
+  IssueStateFilter,
+  IssueSortingDirection,
+} from "../../common";
 import { IssueItem } from "./IssueItem";
 import { Pagination } from "../Pagination";
 import { Issue } from "./types";
 import { Select } from "../Select";
 import { FormattedMessage } from "react-intl";
 import { getMessageId } from "../../i18n/getMessageId";
-
-const STATE_FILTER_OPTIONS = [
-  {
-    label: IssueStateFilter.open,
-    value: IssueStateFilter.open,
-  },
-  {
-    label: IssueStateFilter.closed,
-    value: IssueStateFilter.closed,
-  },
-  {
-    label: IssueStateFilter.all,
-    value: IssueStateFilter.all,
-  },
-];
+import { Filters } from "./Filters";
 
 const Root = styled.div`
   width: 100%;
@@ -32,25 +22,6 @@ const Root = styled.div`
 
   display: grid;
   grid-template-rows: auto auto 3rem;
-`;
-
-const FilterRow = styled.div`
-  width: 100%;
-  border-bottom: 1px solid var(--border-color);
-  padding: 1rem;
-`;
-
-const FilterItem = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.25rem;
-`;
-
-const FilterItemLabel = styled.label`
-  font-size: 0.875rem;
-  color: rgba(32, 33, 37, 0.8);
 `;
 
 const PaginationRow = styled.div`
@@ -71,12 +42,20 @@ const IssueListItem = styled.li`
 `;
 
 interface Props {
+  issues: Array<Issue>;
+
   stateFilter: IssueStateFilter;
   onStateFilterChange: (state: IssueStateFilter) => void;
+
+  sorting: IssueSortingOption;
+  onSortingChange: (sorting: IssueSortingOption) => void;
+
+  sortDirection: IssueSortingDirection;
+  onSortDirectionChange: (sorting: IssueSortingDirection) => void;
+
   page: number;
   pageLinkCreator: (page: number) => LocationDescriptor;
   pages: number;
-  issues: Array<Issue>;
 }
 
 const IssuesTable = ({
@@ -86,23 +65,21 @@ const IssuesTable = ({
   pageLinkCreator,
   stateFilter,
   onStateFilterChange,
+  sorting,
+  onSortingChange,
+  sortDirection,
+  onSortDirectionChange,
 }: Props) => {
   return (
     <Root>
-      <FilterRow>
-        <FilterItem>
-          <FilterItemLabel>
-            <FormattedMessage
-              id={getMessageId("issues-table.filters.state.label")}
-            />
-          </FilterItemLabel>
-          <Select
-            value={stateFilter}
-            options={STATE_FILTER_OPTIONS}
-            onChange={onStateFilterChange}
-          />
-        </FilterItem>
-      </FilterRow>
+      <Filters
+        stateFilter={stateFilter}
+        onStateFilterChange={onStateFilterChange}
+        sorting={sorting}
+        onSortingChange={onSortingChange}
+        sortDirection={sortDirection}
+        onSortDirectionChange={onSortDirectionChange}
+      />
       <ul>
         {issues.map((issue) => (
           <IssueListItem key={issue.id}>
