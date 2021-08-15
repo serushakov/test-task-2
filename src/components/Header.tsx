@@ -53,7 +53,9 @@ const Header = ({ links }: Props) => {
         {links && (
           <Links>
             {links.map((link) => (
-              <StyledLink to={link.to}>{link.label}</StyledLink>
+              <StyledLink key={link.label} to={link.to}>
+                {link.label}
+              </StyledLink>
             ))}
           </Links>
         )}
