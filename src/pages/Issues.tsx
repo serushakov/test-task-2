@@ -81,7 +81,7 @@ const Issues = ({
   }, [search]);
 
   const { data } = useFetch(
-    ["issues", organization, repository, page],
+    ["issues", organization, repository, page, stateFilter],
     async () => {
       const {
         data: issues,
@@ -98,7 +98,7 @@ const Issues = ({
   );
 
   useEffect(() => {
-    if (typeof pages === "number" || !data?.linkHeader) return;
+    if (!data?.linkHeader) return;
 
     const pagesFromHeader = getTotalPagesFromLink(data.linkHeader);
     setPages(pagesFromHeader === -1 ? page : pagesFromHeader);

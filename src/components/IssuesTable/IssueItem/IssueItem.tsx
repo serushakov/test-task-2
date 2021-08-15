@@ -77,7 +77,7 @@ const IssueItem = ({
         </Title>
         <Description id={descriptionId}>
           <FormattedMessage
-            id={getMessageId("issue-table.issue.description")}
+            id={getMessageId("issues-table.issue.description")}
             values={{
               number,
               author,

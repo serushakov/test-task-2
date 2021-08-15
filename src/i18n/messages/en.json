@@ -1,3 +1,4 @@
 {
-  "issue-table.issue.description": "#{number} opened on {date} by {author}"
+  "issues-table.issue.description": "#{number} opened on {date} by {author}",
+  "issues-table.filters.state.label": "Issue status"
 }

@@ -6,26 +6,32 @@ const Root = styled.select`
   border: 1px solid var(--border-color);
 `;
 
-type Option = {
+type Option<ValueT> = {
   label: string;
-  value: string;
+  value: ValueT;
 };
 
-interface Props {
+interface Props<ValueT> {
   disabled?: boolean;
   className?: string;
   id?: string;
-  options: Array<Option>;
-  value: string | undefined;
-  onChange: (value: string) => void;
+  options: Array<Option<ValueT>>;
+  value: ValueT | undefined;
+  onChange: (value: ValueT) => void;
   placeholder?: string;
 }
 
-const Select = ({ disabled, value, onChange, options, placeholder }: Props) => {
+const Select = <T extends string = string>({
+  disabled,
+  value,
+  onChange,
+  options,
+  placeholder,
+}: Props<T>) => {
   return (
     <Root
       disabled={disabled}
-      onChange={(event) => onChange(event.target.value)}
+      onChange={(event) => onChange(event.target.value as T)}
       value={value}
     >
       {placeholder && (
