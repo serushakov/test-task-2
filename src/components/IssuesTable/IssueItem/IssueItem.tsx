@@ -11,13 +11,16 @@ import { StateIcon } from "./StateIcon";
 const Title = styled(Link)`
   text-decoration: none;
   color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Root = styled.div`
   cursor: pointer;
   padding: 0 1rem;
   display: grid;
-  grid-template-columns: min-content auto min-content;
+  grid-template-columns: min-content 1fr min-content;
   align-items: center;
   gap: 1rem;
 
@@ -34,6 +37,7 @@ const TitleDescription = styled.div`
   flex-direction: column;
   gap: 0.25rem;
   flex: 1;
+  min-width: 0;
 `;
 
 const Description = styled.div`

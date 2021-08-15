@@ -35,6 +35,10 @@ const PaginationRow = styled.div`
   border-top: 1px solid var(--border-color);
 `;
 
+const IssueList = styled.ul`
+  min-width: 0;
+`;
+
 const IssueListItem = styled.li`
   &:nth-child(even) {
     background: rgba(32, 33, 37, 0.06);
@@ -86,13 +90,13 @@ const IssuesTable = ({
           onSortDirectionChange={onSortDirectionChange}
         />
       </TableHead>
-      <ul>
+      <IssueList>
         {issues.map((issue) => (
           <IssueListItem key={issue.id}>
             <IssueItem {...issue} />
           </IssueListItem>
         ))}
-      </ul>
+      </IssueList>
       <PaginationRow>
         <Pagination
           page={page}
