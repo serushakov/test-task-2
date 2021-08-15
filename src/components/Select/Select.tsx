@@ -19,6 +19,7 @@ interface Props<ValueT> {
   value: ValueT | undefined;
   onChange: (value: ValueT) => void;
   placeholder?: string;
+  "aria-labelledby"?: string;
 }
 
 const Select = <T extends string = string>({
@@ -27,12 +28,14 @@ const Select = <T extends string = string>({
   onChange,
   options,
   placeholder,
+  "aria-labelledby": ariaLabelledBy,
 }: Props<T>) => {
   return (
     <Root
       disabled={disabled}
       onChange={(event) => onChange(event.target.value as T)}
       value={value}
+      aria-labelledby={ariaLabelledBy}
     >
       {placeholder && (
         <option disabled selected>

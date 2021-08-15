@@ -94,30 +94,35 @@ const Filters = ({
   return (
     <FilterRow>
       <FilterItem>
-        <FilterItemLabel>
+        <FilterItemLabel htmlFor="filter-state" id="filter-state-label">
           <FormattedMessage
             id={getMessageId("issues-table.filters.state.label")}
           />
         </FilterItemLabel>
         <Select
+          id="filter-state"
+          aria-labelledby="filter-state-label"
           value={stateFilter}
           options={STATE_FILTER_OPTIONS}
           onChange={onStateFilterChange}
         />
       </FilterItem>
       <FilterItem>
-        <FilterItemLabel>
+        <FilterItemLabel htmlFor="filter-sorting" id="filter-sorting-label">
           <FormattedMessage
             id={getMessageId("issues-table.filters.sorting.label")}
           />
         </FilterItemLabel>
         <SelectRow>
           <Select
+            id="filter-sorting"
+            aria-labelledby="filter-sorting-label"
             value={sorting}
             options={SORTING_OPTIONS}
             onChange={onSortingChange}
           />
           <Select
+            aria-labelledby="filter-sorting-label"
             value={sortDirection}
             options={SORT_DIRECTION_OPTIONS}
             onChange={onSortDirectionChange}
