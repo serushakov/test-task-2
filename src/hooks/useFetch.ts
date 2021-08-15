@@ -63,7 +63,6 @@ const useFetch = <T, ErrorT = Error>(
         };
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     typeof key === "string" ? [key] : key
   );
 
