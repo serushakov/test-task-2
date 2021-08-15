@@ -187,6 +187,7 @@ const LandingPage = () => {
               disabled={typeof data === "undefined"}
               onChange={setRepository}
               value={repository}
+              placeholder="Select a repository..."
               options={
                 data?.map((repo) => ({
                   value: repo.name,
