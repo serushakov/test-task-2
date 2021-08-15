@@ -5,14 +5,11 @@ import {
   IssueStateFilter,
   IssueSortingDirection,
 } from "../../common";
-import { IssueItem } from "./IssueItem";
 import { Pagination } from "../Pagination";
-import { Issue } from "./types";
-import { Select } from "../Select";
-import { FormattedMessage } from "react-intl";
-import { getMessageId } from "../../i18n/getMessageId";
-import { Filters } from "./Filters";
 
+import { IssueItem } from "./IssueItem";
+import { Filters } from "./Filters";
+import { Issue } from "./types";
 const Root = styled.div`
   width: 100%;
   box-shadow: 0 4px 12px 2px rgba(32, 33, 37, 0.06);
@@ -22,6 +19,13 @@ const Root = styled.div`
 
   display: grid;
   grid-template-rows: auto auto 3rem;
+`;
+
+const TableHead = styled.div`
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
 `;
 
 const PaginationRow = styled.div`
@@ -72,14 +76,16 @@ const IssuesTable = ({
 }: Props) => {
   return (
     <Root>
-      <Filters
-        stateFilter={stateFilter}
-        onStateFilterChange={onStateFilterChange}
-        sorting={sorting}
-        onSortingChange={onSortingChange}
-        sortDirection={sortDirection}
-        onSortDirectionChange={onSortDirectionChange}
-      />
+      <TableHead>
+        <Filters
+          stateFilter={stateFilter}
+          onStateFilterChange={onStateFilterChange}
+          sorting={sorting}
+          onSortingChange={onSortingChange}
+          sortDirection={sortDirection}
+          onSortDirectionChange={onSortDirectionChange}
+        />
+      </TableHead>
       <ul>
         {issues.map((issue) => (
           <IssueListItem key={issue.id}>

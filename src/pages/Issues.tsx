@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Octokit } from "octokit";
 
@@ -12,6 +12,8 @@ import {
   IssueStateFilter,
   IssueSortingDirection,
 } from "../common";
+import { FormattedMessage } from "react-intl";
+import { getMessageId } from "../i18n/getMessageId";
 
 const octokitClient = new Octokit();
 
@@ -63,12 +65,20 @@ const getTotalPagesFromLink = (link: string) => {
   }
 };
 
+const Title = styled.h1`
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+`;
+
 const Issues = ({
   match: {
     params: { organization, repository },
   },
   location: { search },
 }: Props) => {
+  const history = useHistory();
+
   const [stateFilter, setStateFilter] = useState<IssueStateFilter>(
     IssueStateFilter.open
   );
@@ -78,7 +88,6 @@ const Issues = ({
   const [sortDirection, setSortDirection] = useState<IssueSortingDirection>(
     IssueSortingDirection.desc
   );
-
   const [pages, setPages] = useState<number>();
 
   const page = useMemo(() => {
@@ -125,13 +134,21 @@ const Issues = ({
     setPages(pagesFromHeader === -1 ? page : pagesFromHeader);
 
     // Effect should only run when `linkHeader` changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.linkHeader]);
+
+  useEffect(() => {
+    if (pages && page > pages) {
+      history.replace({ search: `page=${1}` });
+    }
+  }, [page, pages]);
 
   return (
     <>
       <Header links={links} />
       <PageContent>
+        <Title>
+          <FormattedMessage id={getMessageId("issues-table.title")} />
+        </Title>
         {data?.issues && (
           <IssuesTable
             issues={data.issues.map(

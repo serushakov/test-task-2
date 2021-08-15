@@ -50,10 +50,6 @@ const SORT_DIRECTION_OPTIONS = [
 ];
 
 const FilterRow = styled.div`
-  width: 100%;
-  border-bottom: 1px solid var(--border-color);
-  padding: 1rem;
-
   display: flex;
   gap: 2rem;
 `;
