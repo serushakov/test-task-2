@@ -6,6 +6,7 @@ import { Loader, X } from "react-feather";
 
 import { Header } from "../components/Header";
 import { useFetch } from "../hooks/useFetch";
+import { Select } from "../components/Select";
 
 const octokitClient = new Octokit();
 
@@ -126,12 +127,6 @@ const ErrorIcon = styled(X)`
   }
 `;
 
-const Select = styled.select`
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid var(--border-color);
-`;
-
 const Button = styled(Link)`
   width: fit-content;
   padding: 1rem 1.5rem;
@@ -190,19 +185,15 @@ const LandingPage = () => {
             <Label>Repository</Label>
             <Select
               disabled={typeof data === "undefined"}
-              onChange={(event) => setRepository(event.target.value)}
+              onChange={setRepository}
               value={repository}
-            >
-              <option disabled selected>
-                Select repository...
-              </option>
-
-              {data?.map((repository) => (
-                <option key={repository.id} value={repository.name}>
-                  {repository.name}
-                </option>
-              ))}
-            </Select>
+              options={
+                data?.map((repo) => ({
+                  value: repo.name,
+                  label: repo.name,
+                })) ?? []
+              }
+            />
           </InputContainer>
 
           {organization && repository && (
