@@ -114,7 +114,7 @@ const Issues = ({
         {data?.issues && (
           <IssuesTable
             issues={data.issues.map(
-              ({ title, comments, id, number, user, state }) => ({
+              ({ title, comments, id, number, user, state, created_at }) => ({
                 id,
                 number,
                 title,
@@ -122,6 +122,7 @@ const Issues = ({
                 state,
                 author: user?.login ?? "unknown",
                 link: `/${organization}/${repository}/issues/${number}`,
+                date: new Date(created_at),
               })
             )}
             page={page}

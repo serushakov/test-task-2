@@ -8,4 +8,5 @@ export type Issue = {
   number: number;
   comments: number;
   link: LocationDescriptor;
+  date: Date;
 };

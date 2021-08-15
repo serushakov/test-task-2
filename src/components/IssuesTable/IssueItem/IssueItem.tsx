@@ -1,9 +1,12 @@
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { StateIcon } from "./StateIcon";
+import { FormattedDate, FormattedMessage } from "react-intl";
 import { MessageSquare } from "react-feather";
 
 import { Issue } from "../types";
+import { getMessageId } from "../../../i18n/getMessageId";
+
+import { StateIcon } from "./StateIcon";
 
 const Title = styled(Link)`
   text-decoration: none;
@@ -50,7 +53,15 @@ const StyledMessageSquare = styled(MessageSquare)`
   height: 1rem;
 `;
 
-const IssueItem = ({ link, title, author, state, number, comments }: Issue) => {
+const IssueItem = ({
+  link,
+  title,
+  author,
+  state,
+  number,
+  comments,
+  date,
+}: Issue) => {
   const history = useHistory();
   const handleClick = () => history.push(link);
 
@@ -59,7 +70,23 @@ const IssueItem = ({ link, title, author, state, number, comments }: Issue) => {
       <StateIcon state={state} />
       <TitleDescription>
         <Title to={link}>{title}</Title>
-        <Description>{`#${number} opened by ${author}`}</Description>
+        <Description>
+          <FormattedMessage
+            id={getMessageId("issue-table.issue.description")}
+            values={{
+              number,
+              author,
+              date: (
+                <FormattedDate
+                  value={date}
+                  year="numeric"
+                  day="numeric"
+                  month="long"
+                />
+              ),
+            }}
+          />
+        </Description>
       </TitleDescription>
       {comments > 0 && (
         <Comments>
