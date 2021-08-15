@@ -61,16 +61,21 @@ const IssueItem = ({
   number,
   comments,
   date,
+  id,
 }: Issue) => {
   const history = useHistory();
   const handleClick = () => history.push(link);
+
+  const descriptionId = `${id}-description`;
 
   return (
     <Root onClick={handleClick}>
       <StateIcon state={state} />
       <TitleDescription>
-        <Title to={link}>{title}</Title>
-        <Description>
+        <Title to={link} aria-describedby={descriptionId}>
+          {title}
+        </Title>
+        <Description id={descriptionId}>
           <FormattedMessage
             id={getMessageId("issue-table.issue.description")}
             values={{
