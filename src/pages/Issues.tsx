@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
 import { Octokit } from "octokit";
@@ -46,55 +46,78 @@ type Props = RouteComponentProps<{
 const getTotalPagesFromLink = (link: string) => {
   const items = link.split(", ");
   const itemWithLast = items.find((item) => item.includes(`rel="last"`));
-  const url = itemWithLast?.replace(/<|>; rel="last"/gm, "");
 
-  if (!url) return undefined;
+  // If there's no item with rel="last", that means last page has been reached
+  if (!itemWithLast) return -1;
 
-  const parsedUrl = new URL(url);
-  const pagesString = parsedUrl.searchParams.get("page");
-  const pages = Number(pagesString);
+  const url = itemWithLast.replace(/<|>; rel="last"/gm, "");
 
-  return pages;
+  try {
+    const parsedUrl = new URL(url);
+    const pagesString = parsedUrl.searchParams.get("page");
+    const pages = Number(pagesString);
+
+    return isNaN(pages) ? undefined : pages;
+  } catch {
+    return undefined;
+  }
 };
 
 const Issues = ({
   match: {
     params: { organization, repository },
   },
+  location: { search },
 }: Props) => {
   const [stateFilter, setStateFilter] = useState<IssueStateFilter>(
     IssueStateFilter.open
   );
-  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState<number>();
 
-  const { data } = useFetch(["issues", organization, repository], async () => {
-    const {
-      data: issues,
-      headers: { link },
-    } = await octokitClient.rest.issues.listForRepo({
-      owner: organization,
-      repo: repository,
-      state: stateFilter,
-      page,
-    });
+  const page = useMemo(() => {
+    const params = new URLSearchParams(search);
 
-    return { issues, pages: link ? getTotalPagesFromLink(link) : undefined };
-  });
+    const pageParam = params.get("page");
 
-  const issues = data?.issues;
-  const pages = data?.pages;
+    const parsedPage = Number(pageParam);
+
+    return isNaN(parsedPage) ? 1 : parsedPage;
+  }, [search]);
+
+  const { data } = useFetch(
+    ["issues", organization, repository, page],
+    async () => {
+      const {
+        data: issues,
+        headers: { link },
+      } = await octokitClient.rest.issues.listForRepo({
+        owner: organization,
+        repo: repository,
+        state: stateFilter,
+        page,
+      });
+
+      return { issues, linkHeader: link };
+    }
+  );
 
   useEffect(() => {
-    console.log(issues);
-  }, [issues]);
+    if (typeof pages === "number" || !data?.linkHeader) return;
+
+    const pagesFromHeader = getTotalPagesFromLink(data.linkHeader);
+    setPages(pagesFromHeader === -1 ? page : pagesFromHeader);
+
+    // Effect should only run when `linkHeader` changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.linkHeader]);
 
   return (
     <>
       <Header links={links} />
       <PageContent>
-        {issues && (
+        {data?.issues && (
           <IssuesTable
-            issues={issues.map(
+            issues={data.issues.map(
               ({ title, comments, id, number, user, state }) => ({
                 id,
                 number,
@@ -108,7 +131,9 @@ const Issues = ({
               })
             )}
             page={page}
-            onPageChange={setPage}
+            pageLinkCreator={(page) =>
+              `/${organization}/${repository}?page=${page}`
+            }
             pages={pages ?? 0}
             stateFilter={stateFilter}
             onStateFilterChange={setStateFilter}

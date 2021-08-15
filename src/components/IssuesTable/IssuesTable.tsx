@@ -1,5 +1,6 @@
-import { LocationDescriptorObject } from "history";
+import { LocationDescriptor, LocationDescriptorObject } from "history";
 import { IssueStateFilter } from "../../common";
+import { Pagination } from "../Pagination";
 
 const ISSUE_STATES = [
   IssueStateFilter.open,
@@ -21,12 +22,12 @@ interface Props {
   stateFilter: IssueStateFilter;
   onStateFilterChange: (state: IssueStateFilter) => void;
   page: number;
-  onPageChange: (page: number) => void;
+  pageLinkCreator: (page: number) => LocationDescriptor;
   pages: number;
   issues: Array<Issue>;
 }
 
-const IssuesTable = ({ issues, pages }: Props) => {
+const IssuesTable = ({ issues, pages, page, pageLinkCreator }: Props) => {
   return (
     <div>
       <ul>
@@ -36,14 +37,7 @@ const IssuesTable = ({ issues, pages }: Props) => {
           </li>
         ))}
       </ul>
-
-      <nav>
-        <ul>
-          {new Array(pages).fill(undefined).map((_, index) => (
-            <li>{index + 1}</li>
-          ))}
-        </ul>
-      </nav>
+      <Pagination page={page} pages={pages} pageLinkCreator={pageLinkCreator} />
     </div>
   );
 };
