@@ -1,23 +1,15 @@
-import React, { useEffect } from "react";
-import { Route, BrowserRouter } from "react-router-dom";
+import { Route, BrowserRouter, Switch } from "react-router-dom";
 
-import { Octokit } from "octokit";
 import { LandingPage } from "./pages";
-
-const octokitClient = new Octokit();
+import { Issues } from "./pages/Issues";
 
 function App() {
-  useEffect(() => {
-    octokitClient.rest.users
-      .getByUsername({ username: "serushakov" })
-      .then((user) => console.log(user));
-  }, []);
-
   return (
     <BrowserRouter>
-      <Route path="/">
-        <LandingPage />
-      </Route>
+      <Switch>
+        <Route exact path="/:organization/:repository" component={Issues} />
+        <Route exact path="/" component={LandingPage} />
+      </Switch>
     </BrowserRouter>
   );
 }
