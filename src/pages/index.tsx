@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import { Header } from "../components/Header";
 import { useFetch } from "../hooks/useFetch";
-import { Loader } from "react-feather";
+import { Loader, X } from "react-feather";
 
 const octokitClient = new Octokit();
 
@@ -97,6 +97,35 @@ const StyledLoader = styled(Loader)`
   }
 `;
 
+const ErrorIcon = styled(X)`
+  position: absolute;
+  top: 50%;
+  inset-inline-end: 0.5rem;
+  transform: translate(0, -50%);
+  color: var(--error-color);
+
+  animation: shake forwards 0.5s ease-in-out;
+
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translate(0, -50%) rotate(0);
+    }
+
+    15%,
+    45%,
+    75% {
+      transform: translate(3px, -50%);
+    }
+
+    30%,
+    60%,
+    90% {
+      transform: translate(-3px, -50%);
+    }
+  }
+`;
+
 const Select = styled.select`
   padding: 0.5rem;
   border-radius: 0.5rem;
@@ -151,6 +180,7 @@ const LandingPage = () => {
                 onChange={(event) => setOrganization(event.currentTarget.value)}
               />
               {loading && <StyledLoader />}
+              {!loading && error && <ErrorIcon />}
             </InputFieldWrapper>
           </InputContainer>
 
