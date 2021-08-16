@@ -2,7 +2,8 @@ import { LocationDescriptor } from "history";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import ReactPaginate from "react-paginate";
+
+import { createArray } from "../../utils";
 
 const Root = styled.nav`
   display: flex;
@@ -53,20 +54,24 @@ const getPagesToDisplay = (
   const lastPage = totalPages;
 
   if (totalPages <= pageOptionsToShow) {
-    return new Array(totalPages)
-      .fill(undefined)
-      .map((_, index) => ({ type: "page", number: index + 1 }));
+    return createArray(totalPages).map((_, index) => ({
+      type: "page",
+      number: index + 1,
+    }));
   }
 
+  // When current page is close to start
   if (currentPage <= pageOptionsToShow) {
     return [
-      ...new Array(pageOptionsToShow + 1).fill(undefined).map((_, index) => ({
+      ...createArray(pageOptionsToShow + 1).map((_, index) => ({
         type: "page" as const,
         number: index + 1,
       })),
       { type: "divider" },
       { type: "page", number: totalPages },
     ];
+
+    // When current page is close to end
   } else if (totalPages - currentPage < pageOptionsToShow) {
     return [
       {
@@ -74,11 +79,13 @@ const getPagesToDisplay = (
         number: 1,
       },
       { type: "divider" },
-      ...new Array(pageOptionsToShow + 1).fill(undefined).map((_, index) => ({
+      ...createArray(pageOptionsToShow + 1).map((_, index) => ({
         type: "page" as const,
         number: totalPages - (pageOptionsToShow - index),
       })),
     ];
+
+    // When current page is somewhere between
   } else {
     return [
       {
@@ -86,7 +93,7 @@ const getPagesToDisplay = (
         number: firstPage,
       },
       { type: "divider" },
-      ...new Array(pageOptionsToShow).fill(undefined).map((_, index) => ({
+      ...createArray(pageOptionsToShow + 1).map((_, index) => ({
         type: "page" as const,
         number: currentPage - (Math.floor(pageOptionsToShow / 2) - index),
       })),
