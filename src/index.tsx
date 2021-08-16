@@ -40,6 +40,16 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
   }
 
+  button, input[type="submit"], input[type="reset"] {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+  }
+
   #root {
     flex: 1;
 
