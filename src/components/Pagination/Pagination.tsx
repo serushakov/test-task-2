@@ -8,7 +8,6 @@ import { createArray } from "../../utils";
 const Root = styled.nav`
   display: flex;
   align-items: center;
-  gap: 1rem;
 `;
 
 const List = styled.ul`

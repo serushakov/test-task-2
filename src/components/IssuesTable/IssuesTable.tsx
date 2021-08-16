@@ -136,7 +136,9 @@ const IssuesTable = ({
               </IssueListItem>
             ))
           : createArray(itemsPerPage).map((_, index) => (
-              <IssueItemLoader key={index} />
+              <IssueListItem key={index}>
+                <IssueItemLoader />
+              </IssueListItem>
             ))}
       </IssueList>
       <PaginationRow>
