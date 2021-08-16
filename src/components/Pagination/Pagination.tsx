@@ -2,9 +2,12 @@ import { LocationDescriptor } from "history";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import ReactPaginate from "react-paginate";
 
 const Root = styled.nav`
-  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 `;
 
 const List = styled.ul`
@@ -43,68 +46,54 @@ type ItemType =
 
 const getPagesToDisplay = (
   totalPages: number,
-  page: number
+  currentPage: number
 ): Array<ItemType> => {
   const pageOptionsToShow = 5;
+  const firstPage = 1;
+  const lastPage = totalPages;
 
-  if (totalPages < 5) {
+  if (totalPages <= pageOptionsToShow) {
     return new Array(totalPages)
       .fill(undefined)
       .map((_, index) => ({ type: "page", number: index + 1 }));
   }
 
-  if (page <= 4) {
+  if (currentPage <= pageOptionsToShow) {
     return [
-      {
-        type: "page",
-        number: 1,
-      },
-      {
-        type: "page",
-        number: 2,
-      },
-      {
-        type: "page",
-        number: 3,
-      },
-      {
-        type: "page",
-        number: 4,
-      },
-      {
-        type: "page",
-        number: 5,
-      },
+      ...new Array(pageOptionsToShow + 1).fill(undefined).map((_, index) => ({
+        type: "page" as const,
+        number: index + 1,
+      })),
       { type: "divider" },
       { type: "page", number: totalPages },
     ];
-  } else if (totalPages - page < 4) {
+  } else if (totalPages - currentPage < pageOptionsToShow) {
     return [
       {
         type: "page",
         number: 1,
       },
       { type: "divider" },
-      ...new Array(pageOptionsToShow).fill(undefined).map((_, index) => ({
+      ...new Array(pageOptionsToShow + 1).fill(undefined).map((_, index) => ({
         type: "page" as const,
-        number: totalPages - (pageOptionsToShow - index - 1),
+        number: totalPages - (pageOptionsToShow - index),
       })),
     ];
   } else {
     return [
       {
         type: "page",
-        number: 1,
+        number: firstPage,
       },
       { type: "divider" },
       ...new Array(pageOptionsToShow).fill(undefined).map((_, index) => ({
         type: "page" as const,
-        number: page - (2 - index),
+        number: currentPage - (Math.floor(pageOptionsToShow / 2) - index),
       })),
       { type: "divider" },
       {
         type: "page",
-        number: totalPages,
+        number: lastPage,
       },
     ];
   }
@@ -114,7 +103,6 @@ const Pagination = ({ pages, page, pageLinkCreator }: Props) => {
   return (
     <Root>
       <ArrowLeft />
-      <ArrowRight />
       <List>
         {getPagesToDisplay(pages, page).map((item, index) => {
           switch (item.type) {
@@ -134,6 +122,7 @@ const Pagination = ({ pages, page, pageLinkCreator }: Props) => {
           }
         })}
       </List>
+      <ArrowRight />
     </Root>
   );
 };
