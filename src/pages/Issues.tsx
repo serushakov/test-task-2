@@ -100,7 +100,7 @@ const Issues = ({
     return isNaN(parsedPage) ? 1 : parsedPage;
   }, [search]);
 
-  const { data } = useFetch(
+  const { data, loading } = useFetch(
     [
       "issues",
       organization,
@@ -163,6 +163,7 @@ const Issues = ({
                 date: new Date(created_at),
               })
             )}
+            isLoading={loading}
             stateFilter={stateFilter}
             onStateFilterChange={setStateFilter}
             sorting={sorting}
