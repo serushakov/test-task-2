@@ -12,22 +12,47 @@ const Root = styled.nav`
 `;
 
 const List = styled.ul`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: center;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
 `;
 
 const PageLink = styled(Link)<{ selected: boolean }>`
+  padding: 0.75rem;
+  display: block;
+  text-align: center;
   color: ${({ selected }) =>
     selected ? "var(--text-color)" : "rgba(32,33,37, 0.8)"};
   text-decoration: none;
 
-  font-weight: ${({ selected }) => (selected ? 600 : "normal")};
+  font-weight: ${({ selected }) => (selected ? "bold" : "normal")};
 
   &:hover {
     color: var(--primary-color);
   }
+`;
+
+const BoxWrapper = styled.li`
+  flex: 1 0 2rem;
+  border: 0 solid var(--border-color);
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-inline-end-width: 1px;
+
+  &:first-of-type {
+    border-start-start-radius: 0.5rem;
+    border-end-start-radius: 0.5rem;
+    border-inline-start-width: 1px;
+  }
+
+  &:last-of-type {
+    border-start-end-radius: 0.5rem;
+    border-end-end-radius: 0.5rem;
+  }
+`;
+
+const Divider = styled.div`
+  padding: 0.75rem;
 `;
 
 interface Props {
@@ -93,7 +118,7 @@ const getPagesToDisplay = (
         number: firstPage,
       },
       { type: "divider" },
-      ...createArray(pageOptionsToShow + 1).map((_, index) => ({
+      ...createArray(pageOptionsToShow).map((_, index) => ({
         type: "page" as const,
         number: currentPage - (Math.floor(pageOptionsToShow / 2) - index),
       })),
@@ -115,17 +140,21 @@ const Pagination = ({ pages, page, pageLinkCreator }: Props) => {
           switch (item.type) {
             case "page":
               return (
-                <li key={`${item.type}-${item.number}`}>
+                <BoxWrapper key={`${item.type}-${item.number}`}>
                   <PageLink
                     selected={item.number === page}
                     to={pageLinkCreator(item.number)}
                   >
                     {item.number}
                   </PageLink>
-                </li>
+                </BoxWrapper>
               );
             case "divider":
-              return <li key={`divider-${index}`}>...</li>;
+              return (
+                <BoxWrapper key={`divider-${index}`}>
+                  <Divider>•••</Divider>
+                </BoxWrapper>
+              );
           }
         })}
       </List>

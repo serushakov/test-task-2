@@ -5,4 +5,4 @@
  * called on it.
  */
 export const createArray = (length: number) =>
-  new Array(length + 1).fill(undefined);
+  new Array(length).fill(undefined);

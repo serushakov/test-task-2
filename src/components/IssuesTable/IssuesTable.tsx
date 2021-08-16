@@ -21,7 +21,7 @@ const Root = styled.div`
   overflow: hidden;
 
   display: grid;
-  grid-template-rows: auto auto 3rem;
+  grid-template-rows: repeat(auto, 3);
 `;
 
 const TableHead = styled.div`
@@ -35,7 +35,9 @@ const PaginationRow = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
   border-top: 1px solid var(--border-color);
+  padding: 1rem;
 `;
 
 const IssueList = styled.ul`
