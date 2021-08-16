@@ -55,6 +55,16 @@ const Divider = styled.div`
   padding: 0.75rem;
 `;
 
+const PrevNextLink = styled(Link)<{ disabled: boolean }>`
+  padding: 0.75rem;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  color: ${({ disabled }) => disabled && "rgba(32,33,37, 0.4)"};
+
+  &:hover {
+    ${({ disabled }) => !disabled && "color: var(--primary-color)"};
+  }
+`;
+
 interface Props {
   pages: number;
   page: number;
@@ -88,7 +98,7 @@ const getPagesToDisplay = (
   // When current page is close to start
   if (currentPage <= pageOptionsToShow) {
     return [
-      ...createArray(pageOptionsToShow + 1).map((_, index) => ({
+      ...createArray(pageOptionsToShow + 2).map((_, index) => ({
         type: "page" as const,
         number: index + 1,
       })),
@@ -104,9 +114,9 @@ const getPagesToDisplay = (
         number: 1,
       },
       { type: "divider" },
-      ...createArray(pageOptionsToShow + 1).map((_, index) => ({
+      ...createArray(pageOptionsToShow + 2).map((_, index) => ({
         type: "page" as const,
-        number: totalPages - (pageOptionsToShow - index),
+        number: totalPages - (pageOptionsToShow - index + 1),
       })),
     ];
 
@@ -132,9 +142,18 @@ const getPagesToDisplay = (
 };
 
 const Pagination = ({ pages, page, pageLinkCreator }: Props) => {
+  const isPrevDisabled = page === 1;
+  const isNextDisabled = page === pages;
+
   return (
     <Root>
-      <ArrowLeft />
+      <PrevNextLink
+        to={pageLinkCreator(Math.max(page - 1, 0))}
+        disabled={isPrevDisabled}
+        onClick={(e) => isPrevDisabled && e.preventDefault()}
+      >
+        <ArrowLeft />
+      </PrevNextLink>
       <List>
         {getPagesToDisplay(pages, page).map((item, index) => {
           switch (item.type) {
@@ -158,7 +177,13 @@ const Pagination = ({ pages, page, pageLinkCreator }: Props) => {
           }
         })}
       </List>
-      <ArrowRight />
+      <PrevNextLink
+        to={pageLinkCreator(Math.min(page + 1, pages))}
+        disabled={isNextDisabled}
+        onClick={(e) => isNextDisabled && e.preventDefault()}
+      >
+        <ArrowRight />
+      </PrevNextLink>
     </Root>
   );
 };
