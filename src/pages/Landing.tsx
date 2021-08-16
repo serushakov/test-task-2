@@ -1,14 +1,12 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Octokit } from "octokit";
 import { Link } from "react-router-dom";
 import { Loader, X } from "react-feather";
 
 import { Header } from "../components/Header";
 import { useFetch } from "../hooks/useFetch";
 import { Select } from "../components/Select";
-
-const octokitClient = new Octokit();
+import { octokitClient } from "../octokitClient";
 
 const PageContent = styled.div`
   flex: 1;
@@ -140,7 +138,7 @@ const Button = styled(Link)`
   align-self: center;
 `;
 
-const LandingPage = () => {
+const Landing = () => {
   const [organization, setOrganization] = useState("");
   const [repository, setRepository] = useState<string>();
 
@@ -213,4 +211,4 @@ const LandingPage = () => {
   );
 };
 
-export { LandingPage };
+export { Landing };

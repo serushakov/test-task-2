@@ -1,22 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { Octokit } from "octokit";
+import { FormattedMessage } from "react-intl";
 
 import { Header } from "../components/Header";
 import { useFetch } from "../hooks/useFetch";
 import { IssuesTable } from "../components/IssuesTable";
-
 import {
   IssueSortingOption,
   IssueStateFilter,
   IssueSortingDirection,
   DEFAULT_ITEMS_PER_PAGE,
 } from "../common";
-import { FormattedMessage } from "react-intl";
 import { getMessageId } from "../i18n/getMessageId";
-
-const octokitClient = new Octokit();
+import { octokitClient } from "../octokitClient";
 
 const PageContent = styled.div`
   flex: 1;
