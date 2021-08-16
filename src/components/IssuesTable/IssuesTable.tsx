@@ -12,6 +12,7 @@ import { Pagination } from "../Pagination";
 import { IssueItem } from "./IssueItem";
 import { Filters } from "./Filters";
 import { Issue } from "./types";
+import { createArray } from "../../utils";
 
 const Root = styled.div`
   width: 100%;
@@ -72,9 +73,16 @@ const LoadingSpinner = styled(Loader)`
   }
 `;
 
+const IssueItemLoader = styled.div`
+  height: 3.125rem;
+`;
+
 interface Props {
-  issues: Array<Issue>;
+  issues: Array<Issue> | undefined;
   isLoading: boolean;
+
+  itemsPerPage: number;
+  onItemsPerPageChange: (itemsPerPage: number) => void;
 
   stateFilter: IssueStateFilter;
   onStateFilterChange: (state: IssueStateFilter) => void;
@@ -92,6 +100,8 @@ interface Props {
 
 const IssuesTable = ({
   issues,
+  itemsPerPage,
+  onItemsPerPageChange,
   pages,
   page,
   pageLinkCreator,
@@ -113,15 +123,21 @@ const IssuesTable = ({
           onSortingChange={onSortingChange}
           sortDirection={sortDirection}
           onSortDirectionChange={onSortDirectionChange}
+          itemsPerPage={itemsPerPage}
+          onItemsPerPageChange={onItemsPerPageChange}
         />
         {isLoading && <LoadingSpinner />}
       </TableHead>
       <IssueList>
-        {issues.map((issue) => (
-          <IssueListItem key={issue.id}>
-            <IssueItem {...issue} />
-          </IssueListItem>
-        ))}
+        {issues
+          ? issues.map((issue) => (
+              <IssueListItem key={issue.id}>
+                <IssueItem {...issue} />
+              </IssueListItem>
+            ))
+          : createArray(itemsPerPage).map((_, index) => (
+              <IssueItemLoader key={index} />
+            ))}
       </IssueList>
       <PaginationRow>
         <Pagination

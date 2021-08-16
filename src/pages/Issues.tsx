@@ -11,6 +11,7 @@ import {
   IssueSortingOption,
   IssueStateFilter,
   IssueSortingDirection,
+  DEFAULT_ITEMS_PER_PAGE,
 } from "../common";
 import { FormattedMessage } from "react-intl";
 import { getMessageId } from "../i18n/getMessageId";
@@ -88,6 +89,9 @@ const Issues = ({
   const [sortDirection, setSortDirection] = useState<IssueSortingDirection>(
     IssueSortingDirection.desc
   );
+  const [itemsPerPage, setItemsPerPage] = useState<number>(
+    DEFAULT_ITEMS_PER_PAGE
+  );
   const [pages, setPages] = useState<number>();
 
   const page = useMemo(() => {
@@ -109,6 +113,7 @@ const Issues = ({
       stateFilter,
       sorting,
       sortDirection,
+      itemsPerPage,
     ],
     async () => {
       const {
@@ -121,6 +126,7 @@ const Issues = ({
         page,
         sort: sorting,
         direction: sortDirection,
+        per_page: itemsPerPage,
       });
 
       return { issues, linkHeader: link };
@@ -149,34 +155,34 @@ const Issues = ({
         <Title>
           <FormattedMessage id={getMessageId("issues-table.title")} />
         </Title>
-        {data?.issues && (
-          <IssuesTable
-            issues={data.issues.map(
-              ({ title, comments, id, number, user, state, created_at }) => ({
-                id,
-                number,
-                title,
-                comments,
-                state,
-                author: user?.login ?? "unknown",
-                link: `/${organization}/${repository}/issues/${number}`,
-                date: new Date(created_at),
-              })
-            )}
-            isLoading={loading}
-            stateFilter={stateFilter}
-            onStateFilterChange={setStateFilter}
-            sorting={sorting}
-            onSortingChange={setSorting}
-            sortDirection={sortDirection}
-            onSortDirectionChange={setSortDirection}
-            page={page}
-            pageLinkCreator={(page) =>
-              `/${organization}/${repository}?page=${page}`
-            }
-            pages={pages ?? 0}
-          />
-        )}
+        <IssuesTable
+          issues={data?.issues.map(
+            ({ title, comments, id, number, user, state, created_at }) => ({
+              id,
+              number,
+              title,
+              comments,
+              state,
+              author: user?.login ?? "unknown",
+              link: `/${organization}/${repository}/issues/${number}`,
+              date: new Date(created_at),
+            })
+          )}
+          isLoading={loading}
+          stateFilter={stateFilter}
+          onStateFilterChange={setStateFilter}
+          sorting={sorting}
+          onSortingChange={setSorting}
+          sortDirection={sortDirection}
+          onSortDirectionChange={setSortDirection}
+          page={page}
+          pageLinkCreator={(page) =>
+            `/${organization}/${repository}?page=${page}`
+          }
+          pages={pages ?? 0}
+          itemsPerPage={itemsPerPage}
+          onItemsPerPageChange={setItemsPerPage}
+        />
       </PageContent>
     </>
   );

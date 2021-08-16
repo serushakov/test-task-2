@@ -43,6 +43,9 @@ const TitleDescription = styled.div`
 const Description = styled.div`
   font-size: 0.875rem;
   color: rgba(32, 33, 37, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Comments = styled.div`

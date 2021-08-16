@@ -26,6 +26,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     min-height: 100vh;
     min-height: -webkit-fill-available;
+    min-width: 300px;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -64,7 +65,7 @@ const GlobalStyle = createGlobalStyle`
       --side-padding: 1rem;
     }
 
-    --content-width: 100rem;
+    --content-width: 1200px;
 
     --text-color: rgb(32,33,37);
     --surface-color: #ffffff;

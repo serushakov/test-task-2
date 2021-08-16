@@ -4,6 +4,7 @@ import {
   IssueSortingDirection,
   IssueSortingOption,
   IssueStateFilter,
+  ITEMS_PER_PAGE_VARIANTS,
 } from "../../common";
 import { getMessageId } from "../../i18n/getMessageId";
 import { Select } from "../Select";
@@ -49,8 +50,15 @@ const SORT_DIRECTION_OPTIONS = [
   },
 ];
 
+const ITEMS_PER_PAGE_OPTIONS = ITEMS_PER_PAGE_VARIANTS.map((amount) => ({
+  label: String(amount),
+  value: amount,
+}));
+
 const FilterRow = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
   gap: 2rem;
 `;
 
@@ -81,6 +89,9 @@ interface Props {
 
   sortDirection: IssueSortingDirection;
   onSortDirectionChange: (sorting: IssueSortingDirection) => void;
+
+  itemsPerPage: number;
+  onItemsPerPageChange: (itemsPerPage: number) => void;
 }
 
 const Filters = ({
@@ -90,6 +101,8 @@ const Filters = ({
   onSortingChange,
   sortDirection,
   onSortDirectionChange,
+  itemsPerPage,
+  onItemsPerPageChange,
 }: Props) => {
   return (
     <FilterRow>
@@ -128,6 +141,20 @@ const Filters = ({
             onChange={onSortDirectionChange}
           />
         </SelectRow>
+      </FilterItem>
+      <FilterItem>
+        <FilterItemLabel htmlFor="filter-state" id="filter-state-label">
+          <FormattedMessage
+            id={getMessageId("issues-table.filters.per-page.label")}
+          />
+        </FilterItemLabel>
+        <Select
+          id="filter-state"
+          aria-labelledby="filter-state-label"
+          value={itemsPerPage}
+          options={ITEMS_PER_PAGE_OPTIONS}
+          onChange={onItemsPerPageChange}
+        />
       </FilterItem>
     </FilterRow>
   );

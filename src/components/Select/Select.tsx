@@ -22,7 +22,7 @@ interface Props<ValueT> {
   "aria-labelledby"?: string;
 }
 
-const Select = <T extends string = string>({
+const Select = <T extends string | number = string>({
   disabled,
   value,
   onChange,
