@@ -1,3 +1,4 @@
+import { lighten, transparentize } from "polished";
 import React from "react";
 import ReactDOM from "react-dom";
 import { createGlobalStyle } from "styled-components";
@@ -69,7 +70,7 @@ const GlobalStyle = createGlobalStyle`
 
     --text-color: rgb(32,33,37);
     --surface-color: #ffffff;
-    --border-color: rgba(32, 33, 37, 0.12);
+    --border-color: ${lighten(0.8)("#202127")};
     --primary-color: #5BC0EB;
     --secondary-color: #FDE74C;
     --error-color: #E55934;

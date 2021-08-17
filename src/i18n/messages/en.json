@@ -4,5 +4,6 @@
   "issues-table.filters.sorting.label": "Sort by",
   "issues-table.filters.per-page.label": "Amount per page",
   "issues-table.title": "Issues",
-  "issue-view.created-by": "Opened by {author} on {date}"
+  "issue-view.created-by": "Opened by {author} on {date}",
+  "issue-view.comment.unknown-user": "unknown"
 }

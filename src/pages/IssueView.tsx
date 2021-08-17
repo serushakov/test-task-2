@@ -8,6 +8,7 @@ import { useFetch } from "../hooks/useFetch";
 import { getMessageId } from "../i18n/getMessageId";
 import { octokitClient } from "../octokitClient";
 import { getTotalPagesFromLink } from "../utils";
+import { Comment } from "../components/Comment/Comment";
 
 const PageContent = styled.div`
   flex: 1;
@@ -61,11 +62,16 @@ const Label = styled.p<{ color: string | undefined }>`
   border-radius: 1rem;
   font-weight: bold;
   background-color: ${({ color }) => `#${color}` ?? "var(--warning-color)"};
+
   /* picks text color that will contrast nicely with the color */
   color: ${({ color }) =>
     color && parseToHsl(`#${color}`).lightness < 0.5
       ? "#ffffff"
       : "var(--text-color)"}};
+`;
+
+const Comments = styled.div`
+  margin-top: 2rem;
 `;
 
 const IssueView = ({
@@ -151,6 +157,21 @@ const IssueView = ({
             </Label>
           ))}
         </Labels>
+        <Comments>
+          {comments?.comments.map(
+            (comment) =>
+              comment.body && (
+                <Comment
+                  key={comment.id}
+                  avatarImgUrl={comment.user?.avatar_url}
+                  username={comment.user?.login}
+                  createdAt={comment.created_at}
+                  body={comment.body}
+                  userLink={comment.user?.html_url}
+                />
+              )
+          )}
+        </Comments>
       </PageContent>
     </>
   );
