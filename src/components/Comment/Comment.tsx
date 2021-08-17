@@ -1,4 +1,4 @@
-import { FormattedMessage } from "react-intl";
+import { FormattedDate, FormattedMessage } from "react-intl";
 import styled from "styled-components";
 
 import { getMessageId } from "../../i18n/getMessageId";
@@ -35,6 +35,17 @@ const User = styled.a`
   }
 `;
 
+const UsernameDate = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+const Date = styled.div`
+  color: rgba(32, 33, 37, 0.6);
+  font-size: 0.75rem;
+`;
+
 const Username = styled.div`
   font-weight: 600;
 `;
@@ -61,6 +72,7 @@ const Bubble = styled.div`
   margin-top: 1rem;
   border: 1px solid var(--border-color);
 
+  /* Arrow */
   &:after,
   &:before {
     bottom: 100%;
@@ -110,6 +122,7 @@ const Comment = ({
   username,
   userLink,
   reactions,
+  createdAt,
 }: Props) => {
   console.log(reactions);
   return (
@@ -120,13 +133,24 @@ const Comment = ({
         ) : (
           <EmptyAvatar>?</EmptyAvatar>
         )}
-        <Username>
-          {username ?? (
-            <FormattedMessage
-              id={getMessageId("issue-view.comment.unknown-user")}
+        <UsernameDate>
+          <Username>
+            {username ?? (
+              <FormattedMessage
+                id={getMessageId("issue-view.comment.unknown-user")}
+              />
+            )}
+          </Username>
+          <Date>
+            <FormattedDate
+              value={createdAt}
+              day="numeric"
+              month="long"
+              year="numeric"
+              weekday="long"
             />
-          )}
-        </Username>
+          </Date>
+        </UsernameDate>
       </User>
 
       <Bubble>
