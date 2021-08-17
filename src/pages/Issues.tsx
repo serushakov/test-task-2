@@ -10,11 +10,13 @@ import {
   IssueSortingOption,
   IssueStateFilter,
   IssueSortingDirection,
-  DEFAULT_ITEMS_PER_PAGE,
+  ITEMS_PER_PAGE_VARIANTS,
 } from "../common";
 import { getMessageId } from "../i18n/getMessageId";
 import { octokitClient } from "../octokitClient";
 import { getTotalPagesFromLink } from "../utils";
+import { useNumericSearchParam } from "../hooks/useNumericSearchParam";
+import { useSearchParam } from "../hooks/useSearchParam";
 
 const PageContent = styled.div`
   flex: 1;
@@ -44,30 +46,39 @@ const Issues = ({
   location: { search },
 }: Props) => {
   const history = useHistory();
+  const page = useNumericSearchParam("page", search, 1);
 
-  const [stateFilter, setStateFilter] = useState<IssueStateFilter>(
+  const stateFilter = useSearchParam<IssueStateFilter>(
+    "stateFilter",
+    search,
     IssueStateFilter.open
   );
-  const [sorting, setSorting] = useState<IssueSortingOption>(
+  const sorting = useSearchParam<IssueSortingOption>(
+    "sorting",
+    search,
     IssueSortingOption.created
   );
-  const [sortDirection, setSortDirection] = useState<IssueSortingDirection>(
+  const sortDirection = useSearchParam<IssueSortingDirection>(
+    "sortDirection",
+    search,
     IssueSortingDirection.desc
   );
-  const [itemsPerPage, setItemsPerPage] = useState<number>(
-    DEFAULT_ITEMS_PER_PAGE
+  const itemsPerPage = useNumericSearchParam(
+    "itemsPerPage",
+    search,
+    ITEMS_PER_PAGE_VARIANTS[2]
   );
+
+  const handleQueryParamChangeCreator =
+    <T extends string | number>(queryParam: string) =>
+    (newValue: T) => {
+      const parsedSearch = new URLSearchParams(search);
+      parsedSearch.set(queryParam, String(newValue));
+
+      history.push({ search: parsedSearch.toString() });
+    };
+
   const [pages, setPages] = useState<number>();
-
-  const page = useMemo(() => {
-    const params = new URLSearchParams(search);
-
-    const pageParam = params.get("page");
-
-    const parsedPage = Number(pageParam);
-
-    return isNaN(parsedPage) ? 1 : parsedPage;
-  }, [search]);
 
   const { data, loading } = useFetch(
     [
@@ -99,7 +110,7 @@ const Issues = ({
   );
 
   useEffect(() => {
-    if (!data?.linkHeader) return;
+    if (!data?.linkHeader || typeof page === "string") return;
 
     const pagesFromHeader = getTotalPagesFromLink(data.linkHeader);
     setPages(pagesFromHeader === -1 ? page : pagesFromHeader);
@@ -108,6 +119,7 @@ const Issues = ({
   }, [data?.linkHeader]);
 
   useEffect(() => {
+    // Make sure page query param is not larger than total pages
     if (pages && page > pages) {
       history.replace({ search: `page=${1}` });
     }
@@ -135,18 +147,18 @@ const Issues = ({
           )}
           isLoading={loading}
           stateFilter={stateFilter}
-          onStateFilterChange={setStateFilter}
+          onStateFilterChange={handleQueryParamChangeCreator("stateFilter")}
           sorting={sorting}
-          onSortingChange={setSorting}
+          onSortingChange={handleQueryParamChangeCreator("sorting")}
           sortDirection={sortDirection}
-          onSortDirectionChange={setSortDirection}
+          onSortDirectionChange={handleQueryParamChangeCreator("sortDirection")}
           page={page}
           pageLinkCreator={(page) =>
             `/${organization}/${repository}?page=${page}`
           }
           pages={pages ?? 0}
           itemsPerPage={itemsPerPage}
-          onItemsPerPageChange={setItemsPerPage}
+          onItemsPerPageChange={handleQueryParamChangeCreator("itemsPerPage")}
         />
       </PageContent>
     </>
