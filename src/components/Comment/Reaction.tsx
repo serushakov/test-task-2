@@ -32,7 +32,7 @@ const Reaction = ({ type, amount }: Props) => {
 
   return (
     <Root>
-      {getEmoji()} {amount}
+      {getEmoji()}&nbsp;&nbsp;{amount}
     </Root>
   );
 };
