@@ -57,7 +57,8 @@ const Divider = styled.div`
 const PrevNextLink = styled(Link)<{ disabled: boolean }>`
   padding: 0.75rem;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-  color: ${({ disabled }) => disabled && "rgba(32,33,37, 0.4)"};
+  color: ${({ disabled }) =>
+    disabled ? "rgba(32,33,37, 0.4)" : "var(--text-color)"};
 
   &:hover {
     ${({ disabled }) => !disabled && "color: var(--primary-color)"};
@@ -174,6 +175,7 @@ const Pagination = ({ pages, page, pageLinkCreator }: Props) => {
                 </BoxWrapper>
               );
           }
+          return null;
         })}
       </List>
       <PrevNextLink
