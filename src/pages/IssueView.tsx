@@ -2,6 +2,7 @@ import { FormattedDate, FormattedMessage } from "react-intl";
 import { RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
 import { parseToHsl } from "polished";
+import { omit } from "lodash";
 
 import { Header } from "../components/Header";
 import { useFetch } from "../hooks/useFetch";
@@ -106,6 +107,10 @@ const IssueView = ({
         owner: organization,
         repo: repository,
         issue_number: Number(number),
+        headers: {
+          // Adds reactions to comments 🔥
+          accept: "application/vnd.github.squirrel-girl-preview",
+        },
       });
 
       const totalCommentsPages = link ? getTotalPagesFromLink(link) : 0;
@@ -168,6 +173,10 @@ const IssueView = ({
                   createdAt={comment.created_at}
                   body={comment.body}
                   userLink={comment.user?.html_url}
+                  reactions={
+                    comment.reactions &&
+                    omit(comment.reactions, "url", "total_count")
+                  }
                 />
               )
           )}

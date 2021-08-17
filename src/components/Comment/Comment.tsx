@@ -1,7 +1,11 @@
-import styled from "styled-components";
-import Markdown from "react-markdown";
 import { FormattedMessage } from "react-intl";
+import styled from "styled-components";
+
 import { getMessageId } from "../../i18n/getMessageId";
+
+import { Body } from "./Body";
+import { Reaction } from "./Reaction";
+import { ReactionType } from "./types";
 
 const Root = styled.div`
   display: flex;
@@ -20,6 +24,7 @@ const Avatar = styled.img`
 
 const User = styled.a`
   display: flex;
+  width: fit-content;
   gap: 0.5rem;
   align-items: center;
   text-decoration: none;
@@ -48,7 +53,9 @@ const Bubble = styled.div`
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(32, 33, 37, 0.06);
   padding: 1.5rem;
+  padding-bottom: 1rem;
   white-space: pre-wrap;
+  line-height: 1.2;
   position: relative;
 
   margin-top: 1rem;
@@ -80,15 +87,31 @@ const Bubble = styled.div`
   }
 `;
 
+const Reactions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+`;
+
 interface Props {
   avatarImgUrl: string | undefined;
   createdAt: string;
   username: string | undefined;
   userLink: string | undefined;
   body: string;
+  reactions: Record<ReactionType, number> | undefined;
 }
 
-const Comment = ({ avatarImgUrl, body, username, userLink }: Props) => {
+const Comment = ({
+  avatarImgUrl,
+  body,
+  username,
+  userLink,
+  reactions,
+}: Props) => {
+  console.log(reactions);
   return (
     <Root>
       <User href={userLink} target="_blank">
@@ -107,7 +130,16 @@ const Comment = ({ avatarImgUrl, body, username, userLink }: Props) => {
       </User>
 
       <Bubble>
-        <Markdown>{body}</Markdown>
+        <Body body={body} />
+        <Reactions>
+          {reactions &&
+            Object.entries(reactions).map(
+              ([type, amount]) =>
+                amount > 0 && (
+                  <Reaction type={type as ReactionType} amount={amount} />
+                )
+            )}
+        </Reactions>
       </Bubble>
     </Root>
   );
