@@ -3,5 +3,6 @@
   "issues-table.filters.state.label": "Issue status",
   "issues-table.filters.sorting.label": "Sort by",
   "issues-table.filters.per-page.label": "Amount per page",
-  "issues-table.title": "Issues"
+  "issues-table.title": "Issues",
+  "issue-view.created-by": "Opened by {author} on {date}"
 }
