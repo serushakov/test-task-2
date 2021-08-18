@@ -83,6 +83,7 @@ const IssueDetailsViewWrapper = ({
     <>
       <Header />
       <IssueDetailsView
+        body={issue?.body}
         isBookmarked={isBookmarked}
         onBookmarkClick={() =>
           setBookmarkedIssues(

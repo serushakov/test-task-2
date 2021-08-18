@@ -9,6 +9,7 @@ import { ReactionType, User } from "../../common";
 import { getMessageId } from "../../i18n/getMessageId";
 import { Comment } from "../Comment/Comment";
 import { Pagination } from "../Pagination";
+import { MarkdownRenderer } from "../MarkdownRenderer";
 
 const PageContent = styled.div`
   flex: 1;
@@ -92,6 +93,19 @@ const Label = styled.p<{ color: string | undefined }>`
       : "var(--text-color)"}};
 `;
 
+const Body = styled.div`
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 4px 8px rgba(32, 33, 37, 0.06);
+`;
+
+const EmptyBodyContent = styled.p`
+  font-family: italic;
+  color: rgba(32, 33, 37, 0.64);
+`;
+
 const Comments = styled.div`
   margin-top: 2rem;
 `;
@@ -129,6 +143,7 @@ interface Props {
   title: string | undefined;
   user: User | undefined;
   createdAt: string | undefined;
+  body?: string | null;
   labels:
     | Array<string | { id?: number; color?: string; name: string }>
     | undefined;
@@ -164,6 +179,7 @@ const IssueDetailsView = ({
   backLink,
   onBookmarkClick,
   isBookmarked,
+  body,
 }: Props) => {
   const intl = useIntl();
 
@@ -240,6 +256,16 @@ const IssueDetailsView = ({
           ))}
         </Labels>
       )}
+
+      <Body>
+        {body ? (
+          <MarkdownRenderer source={body} />
+        ) : (
+          <EmptyBodyContent>
+            <FormattedMessage id={getMessageId("issue-view.empty-body")} />
+          </EmptyBodyContent>
+        )}
+      </Body>
 
       {isLoadingComments && (
         <Center>

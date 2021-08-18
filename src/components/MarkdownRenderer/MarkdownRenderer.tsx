@@ -25,6 +25,7 @@ const BlockQuote = styled.blockquote`
 
 const Image = styled.img`
   max-width: 100%;
+  display: block;
 `;
 
 const Pre = styled.pre`
