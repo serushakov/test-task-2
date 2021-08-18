@@ -80,11 +80,11 @@ const GlobalStyle = createGlobalStyle`
 
   @keyframes rotate {
     0% {
-      transform: translate(0, -50%) rotate(0deg);
+      transform: rotate(0deg);
     }
 
     100% {
-      transform: translate(0, -50%) rotate(360deg);
+      transform: rotate(360deg);
     }
   }
 `;
