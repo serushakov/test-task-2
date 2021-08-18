@@ -6,16 +6,31 @@ import { useFetch } from "../hooks/useFetch";
 import { octokitClient } from "../octokitClient";
 import { getTotalPagesFromLink, isDefined } from "../utils";
 import { IssueView } from "../components/IssueView";
+import { useNumericSearchParam } from "../hooks/useNumericSearchParam";
+import { useEffect } from "react";
 
 const IssueDetailsPage = ({
   match: {
     params: { number, organization, repository },
   },
+  history: { action },
+  location: { search },
 }: RouteComponentProps<{
   organization: string;
   repository: string;
   number: string;
 }>) => {
+  const page = useNumericSearchParam("page", search, 1);
+
+  useEffect(() => {
+    // Restoring window scroll if user changes the page
+    // Does not touch scroll if user navigates back, so that
+    // browser figures out scoll position itself
+    if (action === "PUSH") {
+      window.scrollTo(0, 0);
+    }
+  }, [action, page]);
+
   const { data: issue, loading } = useFetch(
     ["issue", organization, repository, number],
     async () => {
@@ -30,7 +45,7 @@ const IssueDetailsPage = ({
   );
 
   const { data, loading: loadingComments } = useFetch(
-    ["issue-comments", organization, repository, number],
+    ["issue-comments", organization, repository, number, page],
     async () => {
       const {
         data: comments,
@@ -39,6 +54,7 @@ const IssueDetailsPage = ({
         owner: organization,
         repo: repository,
         issue_number: Number(number),
+        page,
         headers: {
           // Adds reactions to comments 🔥
           accept: "application/vnd.github.squirrel-girl-preview",
@@ -59,11 +75,15 @@ const IssueDetailsPage = ({
     <>
       <Header />
       <IssueView
+        backLink={`/${organization}/${repository}`}
         isLoading={loading}
         isLoadingComments={loadingComments}
         issueNumber={number}
         createdAt={issue?.created_at}
         title={issue?.title}
+        page={page}
+        totalPages={data?.totalCommentsPages}
+        pageLinkCreator={(page) => ({ search: `page=${page}` })}
         labels={issue?.labels
           .map((label) =>
             typeof label === "string"

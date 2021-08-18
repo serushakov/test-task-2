@@ -6,6 +6,9 @@ import { ReactionType, User } from "../../common";
 import { getMessageId } from "../../i18n/getMessageId";
 import { Comment } from "../Comment/Comment";
 import { Loader } from "react-feather";
+import { LocationDescriptor } from "history";
+import { Pagination } from "../Pagination";
+import { Link } from "react-router-dom";
 
 const PageContent = styled.div`
   flex: 1;
@@ -16,6 +19,15 @@ const PageContent = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+`;
+
+const BackLink = styled(Link)`
+  text-decoration: none;
+  color: var(--text-color);
+
+  &:hover {
+    color: var(--primary-color);
+  }
 `;
 
 const Title = styled.h1`
@@ -88,6 +100,13 @@ const StyledLoader = styled(Loader)`
   animation: rotate 1s linear infinite;
 `;
 
+const PaginationSlot = styled.div`
+  margin-top: 2rem;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`;
+
 interface Props {
   issueNumber: string;
   title: string | undefined;
@@ -105,6 +124,10 @@ interface Props {
   }>;
   isLoading: boolean;
   isLoadingComments: boolean;
+  page: number;
+  totalPages: number | undefined;
+  pageLinkCreator: (page: number) => LocationDescriptor;
+  backLink: LocationDescriptor;
 }
 
 const IssueView = ({
@@ -116,6 +139,10 @@ const IssueView = ({
   comments,
   isLoading,
   isLoadingComments,
+  page,
+  pageLinkCreator,
+  totalPages,
+  backLink,
 }: Props) => {
   if (isLoading) {
     return (
@@ -129,6 +156,7 @@ const IssueView = ({
 
   return (
     <PageContent>
+      <BackLink to={backLink} />
       <Title>
         {title}
         <IssueNumber>#{issueNumber}</IssueNumber>
@@ -195,6 +223,15 @@ const IssueView = ({
               )
           )}
         </Comments>
+      )}
+      {comments && totalPages && (
+        <PaginationSlot>
+          <Pagination
+            page={page}
+            pageLinkCreator={pageLinkCreator}
+            pages={totalPages}
+          />
+        </PaginationSlot>
       )}
     </PageContent>
   );
