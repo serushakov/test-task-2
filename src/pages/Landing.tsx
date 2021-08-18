@@ -132,7 +132,7 @@ const Landing = () => {
   const [organization, setOrganization] = useState("");
   const [repository, setRepository] = useState<string>();
 
-  const { data, loading, error } = useFetch(
+  const { data, isLoading, error } = useFetch(
     ["orgRepositories", organization],
     async () => {
       if (organization.length < 3) return;
@@ -164,8 +164,8 @@ const Landing = () => {
                 value={organization}
                 onChange={(event) => setOrganization(event.currentTarget.value)}
               />
-              {loading && <StyledLoader />}
-              {!loading && error && <ErrorIcon />}
+              {isLoading && <StyledLoader />}
+              {!isLoading && error && <ErrorIcon />}
             </InputFieldWrapper>
           </InputContainer>
 

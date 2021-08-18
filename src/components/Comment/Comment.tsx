@@ -150,7 +150,11 @@ const Comment = ({ body, user, reactions, createdAt }: Props) => {
             Object.entries(reactions).map(
               ([type, amount]) =>
                 amount > 0 && (
-                  <Reaction type={type as ReactionType} amount={amount} />
+                  <Reaction
+                    key={type}
+                    type={type as ReactionType}
+                    amount={amount}
+                  />
                 )
             )}
         </Reactions>

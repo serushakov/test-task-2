@@ -11,7 +11,7 @@ const useFetch = <T, ErrorT = Error>(
   options?: Options
 ) => {
   const [data, setData] = useState<T | undefined>();
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<ErrorT>();
 
   useEffect(
@@ -68,7 +68,7 @@ const useFetch = <T, ErrorT = Error>(
 
   return {
     data,
-    loading,
+    isLoading,
     error,
   };
 };

@@ -36,7 +36,7 @@ const IssuesPage = ({
       history.push({ search: parsedSearch.toString() });
     };
 
-  const { data, loading } = useFetch(
+  const { data, isLoading } = useFetch(
     [
       "issues",
       organization,
@@ -97,7 +97,7 @@ const IssuesPage = ({
             date: new Date(created_at),
           })
         )}
-        isLoading={loading}
+        isLoading={isLoading}
         stateFilter={stateFilter}
         onStateFilterChange={handleQueryParamChangeCreator("stateFilter")}
         sorting={sorting}

@@ -31,7 +31,7 @@ const IssueDetailsPage = ({
     }
   }, [action, page]);
 
-  const { data: issue, loading } = useFetch(
+  const { data: issue, isLoading } = useFetch(
     ["issue", organization, repository, number],
     async () => {
       const { data: issue } = await octokitClient.rest.issues.get({
@@ -44,7 +44,7 @@ const IssueDetailsPage = ({
     }
   );
 
-  const { data, loading: loadingComments } = useFetch(
+  const { data, isLoading: loadingComments } = useFetch(
     ["issue-comments", organization, repository, number, page],
     async () => {
       const {
@@ -76,7 +76,7 @@ const IssueDetailsPage = ({
       <Header />
       <IssueView
         backLink={`/${organization}/${repository}`}
-        isLoading={loading}
+        isLoading={isLoading}
         isLoadingComments={loadingComments}
         issueNumber={number}
         createdAt={issue?.created_at}
