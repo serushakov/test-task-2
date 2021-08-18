@@ -7,12 +7,16 @@ import reset from "styled-reset";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+const MOBILE_WIDTH = 475;
+
 const GlobalStyle = createGlobalStyle`
   ${reset}
 
   html {
-    height: 100%;
     font-size: 16px;
+    @media screen and (max-width: ${MOBILE_WIDTH}px) {
+      font-size: 12px;
+    }
   }
 
   /**
@@ -40,6 +44,8 @@ const GlobalStyle = createGlobalStyle`
 
     display:flex;
     flex-direction: column;
+    font-size: 16px;
+    line-height: 1.2;
   }
 
   button, input[type="submit"], input[type="reset"] {
@@ -61,8 +67,9 @@ const GlobalStyle = createGlobalStyle`
 
   :root {
     --side-padding: 2rem;
+    --mobile-breakpoint: ${MOBILE_WIDTH}px;
 
-    @media screen and (max-width: 468px) {
+    @media screen and (max-width: ${MOBILE_WIDTH}px) {
       --side-padding: 1rem;
     }
 
@@ -77,6 +84,8 @@ const GlobalStyle = createGlobalStyle`
     --success-color: #9BC53D;
     --warning-color: #FA7921;
   }
+
+
 
   @keyframes rotate {
     0% {

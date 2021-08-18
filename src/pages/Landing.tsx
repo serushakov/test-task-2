@@ -73,7 +73,17 @@ const StyledLoader = styled(Loader)`
   top: 50%;
   inset-inline-end: 0.5rem;
   transform: translate(0, -50%);
-  animation: rotate forwards 1s linear infinite, appear forwards 0.15s;
+  animation: rotate-offset forwards 1s linear infinite, appear forwards 0.15s;
+
+  @keyframes rotate-offset {
+    0% {
+      transform: translate(0, -50%) rotate(0deg);
+    }
+
+    100% {
+      transform: translate(0, -50%) rotate(360deg);
+    }
+  }
 
   @keyframes appear {
     0% {

@@ -39,6 +39,10 @@ const PaginationRow = styled.div`
   justify-content: center;
   border-top: 1px solid var(--border-color);
   padding: 1rem;
+
+  @media screen and (max-width: 475px) {
+    padding: 0.5rem;
+  }
 `;
 
 const IssueList = styled.ul`

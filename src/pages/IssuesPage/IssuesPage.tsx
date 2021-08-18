@@ -65,7 +65,7 @@ const IssuesPage = ({
     }
   );
 
-  const pages = useTotalPages(data?.linkHeader);
+  const pages = useTotalPages(data?.linkHeader) ?? page;
 
   useEffect(() => {
     // Make sure page query param is not larger than total pages
@@ -73,6 +73,8 @@ const IssuesPage = ({
       history.replace({ search: `page=${1}` });
     }
   }, [page, pages]);
+
+  console.log(page, pages);
 
   return (
     <>
@@ -105,9 +107,19 @@ const IssuesPage = ({
         sortDirection={sortDirection}
         onSortDirectionChange={handleQueryParamChangeCreator("sortDirection")}
         page={page}
-        pageLinkCreator={(page) =>
-          `/${organization}/${repository}?page=${page}`
-        }
+        pageLinkCreator={(page) => {
+          const params = new URLSearchParams();
+
+          params.set("sorting", sorting);
+          params.set("stateFilter", stateFilter);
+          params.set("sortDirection", sortDirection);
+          params.set("itemsPerPage", String(itemsPerPage));
+          params.set("page", String(page));
+          return {
+            pathname: `/${organization}/${repository}`,
+            search: params.toString(),
+          };
+        }}
         pages={pages ?? 0}
         itemsPerPage={itemsPerPage}
         onItemsPerPageChange={handleQueryParamChangeCreator("itemsPerPage")}

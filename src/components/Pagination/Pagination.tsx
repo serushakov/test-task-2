@@ -2,6 +2,7 @@ import { LocationDescriptor } from "history";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useMedia } from "../../hooks/useMedia";
 
 import { createArray } from "../../utils";
 
@@ -29,6 +30,10 @@ const PageLink = styled(Link)<{ selected: boolean }>`
   &:hover {
     color: var(--primary-color);
   }
+
+  @media screen and (max-width: 475px) {
+    padding: 0.5rem;
+  }
 `;
 
 const BoxWrapper = styled.li`
@@ -37,6 +42,9 @@ const BoxWrapper = styled.li`
   border-top-width: 1px;
   border-bottom-width: 1px;
   border-inline-end-width: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:first-of-type {
     border-start-start-radius: 0.5rem;
@@ -52,10 +60,16 @@ const BoxWrapper = styled.li`
 
 const Divider = styled.div`
   padding: 0.75rem;
+  @media screen and (max-width: 475px) {
+    padding: 0.5rem;
+  }
 `;
 
 const PrevNextLink = styled(Link)<{ disabled: boolean }>`
   padding: 0.75rem;
+  @media screen and (max-width: 475px) {
+    padding: 0.5rem;
+  }
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   color: ${({ disabled }) =>
     disabled ? "rgba(32,33,37, 0.4)" : "var(--text-color)"};
@@ -82,9 +96,9 @@ type ItemType =
 
 const getPagesToDisplay = (
   totalPages: number,
-  currentPage: number
+  currentPage: number,
+  pageOptionsToShow: number
 ): Array<ItemType> => {
-  const pageOptionsToShow = 5;
   const firstPage = 1;
   const lastPage = totalPages;
 
@@ -145,6 +159,8 @@ const Pagination = ({ pages, page, pageLinkCreator }: Props) => {
   const isPrevDisabled = page === 1;
   const isNextDisabled = page === pages;
 
+  const pageOptionsToShow = useMedia("screen and (max-width: 475px)") ? 3 : 5;
+
   return (
     <Root>
       <PrevNextLink
@@ -155,28 +171,30 @@ const Pagination = ({ pages, page, pageLinkCreator }: Props) => {
         <ArrowLeft />
       </PrevNextLink>
       <List>
-        {getPagesToDisplay(pages, page).map((item, index) => {
-          switch (item.type) {
-            case "page":
-              return (
-                <BoxWrapper key={`${item.type}-${item.number}`}>
-                  <PageLink
-                    selected={item.number === page}
-                    to={pageLinkCreator(item.number)}
-                  >
-                    {item.number}
-                  </PageLink>
-                </BoxWrapper>
-              );
-            case "divider":
-              return (
-                <BoxWrapper key={`divider-${index}`}>
-                  <Divider>•••</Divider>
-                </BoxWrapper>
-              );
+        {getPagesToDisplay(pages, page, pageOptionsToShow).map(
+          (item, index) => {
+            switch (item.type) {
+              case "page":
+                return (
+                  <BoxWrapper key={`${item.type}-${item.number}`}>
+                    <PageLink
+                      selected={item.number === page}
+                      to={pageLinkCreator(item.number)}
+                    >
+                      {item.number}
+                    </PageLink>
+                  </BoxWrapper>
+                );
+              case "divider":
+                return (
+                  <BoxWrapper key={`divider-${index}`}>
+                    <Divider>•••</Divider>
+                  </BoxWrapper>
+                );
+            }
+            return null;
           }
-          return null;
-        })}
+        )}
       </List>
       <PrevNextLink
         to={pageLinkCreator(Math.min(page + 1, pages))}
