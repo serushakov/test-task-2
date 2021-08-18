@@ -29,6 +29,7 @@ const BackLink = styled(Link)`
   align-items: center;
   gap: 0.25rem;
   margin-bottom: 2rem;
+  width: fit-content;
 
   &:hover {
     color: var(--primary-color);
