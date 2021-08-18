@@ -5,6 +5,16 @@ interface Options {
   debounce?: number;
 }
 
+/**
+ * Hook to fetch data.
+ *
+ * This hook manages state associated with fetching data, things like
+ * loading and error states. It supports debouncing, and avoids race conditions.
+ *
+ * @param key A unique identifier for the query. If this param changes, query is refetched
+ * @param fetchFunction Function that retunrs a promise
+ * @param options Options object
+ */
 const useFetch = <T, ErrorT = Error>(
   key: string | Array<unknown>,
   fetchFunction: () => Promise<T>,
