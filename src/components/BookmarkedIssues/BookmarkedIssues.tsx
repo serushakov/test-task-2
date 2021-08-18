@@ -7,10 +7,7 @@ import { Issue } from "./Issue";
 
 const Root = styled.div`
   height: fit-content;
-  box-shadow: 0 4px 12px 2px rgba(32, 33, 37, 0.06);
-  border: 1px solid var(--border-color);
-  border-radius: 1rem;
-  padding: 1rem;
+  padding: 1.25rem;
 `;
 
 const Title = styled.h2`

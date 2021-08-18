@@ -183,7 +183,7 @@ const IssueDetailsView = ({
 }: Props) => {
   const intl = useIntl();
 
-  if (isLoading) {
+  if (isLoading || !title) {
     return (
       <PageContent>
         <Center>

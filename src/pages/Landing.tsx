@@ -2,28 +2,33 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Loader, X } from "react-feather";
+import { FormattedMessage, useIntl } from "react-intl";
 
 import { Header } from "../components/Header";
 import { useFetch } from "../hooks/useFetch";
 import { Select } from "../components/Select";
 import { octokitClient } from "../octokitClient";
+import { getMessageId } from "../i18n/getMessageId";
+import { BookmarkedIssues } from "../components/BookmarkedIssues";
+import { BookmarkedIssue } from "../common";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const PageContent = styled.div`
   flex: 1;
-  max-width: var(--content-width);
+  max-width: 35rem;
   width: 100%;
   padding: 0 var(--side-padding);
   margin: 0 auto;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center; ;
+  align-items: center;
+  gap: 2rem;
 `;
 
 const Form = styled.div`
-  flex: 1;
-
-  max-width: 30rem;
+  width: 100%;
   border-radius: 1rem;
   padding: 2rem;
   box-shadow: 0 4px 12px 2px rgba(32, 33, 37, 0.06);
@@ -138,9 +143,15 @@ const Button = styled(Link)`
   align-self: center;
 `;
 
+const Bookmarks = styled.div`
+  box-shadow: 0 4px 12px 2px rgba(32, 33, 37, 0.06);
+  border-radius: 1rem;
+`;
+
 const Landing = () => {
   const [organization, setOrganization] = useState("");
   const [repository, setRepository] = useState<string>();
+  const intl = useIntl();
 
   const { data, isLoading, error } = useFetch(
     ["orgRepositories", organization],
@@ -158,6 +169,9 @@ const Landing = () => {
     }
   );
 
+  const [bookmarkedIssues] =
+    useLocalStorage<Array<BookmarkedIssue>>("bookmarked_issues");
+
   return (
     <>
       <Header />
@@ -165,7 +179,11 @@ const Landing = () => {
         <Form>
           <Title>Details</Title>
           <InputContainer>
-            <Label htmlFor="organization-input">Organization</Label>
+            <Label htmlFor="organization-input">
+              <FormattedMessage
+                id={getMessageId("landing.organization-label")}
+              />
+            </Label>
 
             <InputFieldWrapper>
               <Input
@@ -180,12 +198,16 @@ const Landing = () => {
           </InputContainer>
 
           <InputContainer>
-            <Label>Repository</Label>
+            <Label>
+              <FormattedMessage id={getMessageId("landing.repository-label")} />
+            </Label>
             <Select
               disabled={typeof data === "undefined"}
               onChange={setRepository}
               value={repository}
-              placeholder="Select a repository..."
+              placeholder={intl.formatMessage({
+                id: getMessageId("landing.repository-placelholder"),
+              })}
               options={
                 data?.map((repo) => ({
                   value: repo.name,
@@ -202,10 +224,14 @@ const Landing = () => {
                 pathname: `/${organization}/${repository}`,
               }}
             >
-              Browse Issues
+              <FormattedMessage id={getMessageId("landing.browse-button")} />
             </Button>
           )}
         </Form>
+
+        <Bookmarks>
+          <BookmarkedIssues issues={bookmarkedIssues ?? undefined} />
+        </Bookmarks>
       </PageContent>
     </>
   );

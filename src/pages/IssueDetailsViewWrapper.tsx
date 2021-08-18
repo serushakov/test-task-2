@@ -114,7 +114,10 @@ const IssueDetailsViewWrapper = ({
                 ]
           )
         }
-        backLink={`/${organization}/${repository}?${state?.search}`}
+        backLink={{
+          pathname: `/${organization}/${repository}`,
+          search: state?.search,
+        }}
         isLoading={isLoading}
         isLoadingComments={loadingComments}
         issueNumber={number}
@@ -140,7 +143,7 @@ const IssueDetailsViewWrapper = ({
           (issue?.user && {
             login: issue.user.login,
             avatarUrl: issue.user.avatar_url,
-            url: issue.user.avatar_url,
+            url: issue.user.html_url,
           }) ??
           undefined
         }
@@ -160,7 +163,7 @@ const IssueDetailsViewWrapper = ({
               (user && {
                 login: user.login,
                 avatarUrl: user.avatar_url,
-                url: user.avatar_url,
+                url: user.html_url,
               }) ??
               undefined,
             reactions: reactions && omit(reactions, "url", "total_count"),

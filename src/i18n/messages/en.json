@@ -11,5 +11,9 @@
   "issue-view.empty-body": "No description provided",
   "header.switch-repo-link": "Choose another repository",
   "bookmarked-issues.title": "Bookmarked issues",
-  "bookmarked-issues.empty-message": "Nothing bookmarked yet"
+  "bookmarked-issues.empty-message": "Nothing bookmarked yet",
+  "landing.organization-label": "Organization",
+  "landing.repository-label": "Repository",
+  "landing.browse-button": "Browse issues",
+  "landing.repository-placelholder": "Select a repository..."
 }

@@ -55,6 +55,12 @@ const Aside = styled.aside`
   }
 `;
 
+const Bookmarks = styled.div`
+  box-shadow: 0 4px 12px 2px rgba(32, 33, 37, 0.06);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+`;
+
 interface Props {
   issues: Array<Issue> | undefined;
   isLoading: boolean;
@@ -119,7 +125,9 @@ const IssuesView = ({
         </Table>
 
         <Aside>
-          <BookmarkedIssues issues={bookmarkedIssues} />
+          <Bookmarks>
+            <BookmarkedIssues issues={bookmarkedIssues} />
+          </Bookmarks>
         </Aside>
       </Grid>
     </PageContent>
