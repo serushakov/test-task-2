@@ -7,7 +7,7 @@ import { useFetch } from "../../hooks/useFetch";
 import { octokitClient } from "../../octokitClient";
 import { IssuesView } from "../../components/IssuesView/IssuesView";
 
-import { useIssuesPageQueryParams } from "./useIssuesPageQueryParams";
+import { useIssuesQueryParams } from "./useIssuesQueryParams";
 import { useTotalPages } from "./useTotalPages";
 
 type Props = RouteComponentProps<{
@@ -15,7 +15,7 @@ type Props = RouteComponentProps<{
   repository: string;
 }>;
 
-const IssuesPage = ({
+const IssuesViewWrapper = ({
   match: {
     params: { organization, repository },
   },
@@ -25,7 +25,7 @@ const IssuesPage = ({
   const intl = useIntl();
 
   const { page, sorting, sortDirection, stateFilter, itemsPerPage } =
-    useIssuesPageQueryParams();
+    useIssuesQueryParams();
 
   const handleQueryParamChangeCreator =
     <T extends string | number>(queryParam: string) =>
@@ -128,4 +128,4 @@ const IssuesPage = ({
   );
 };
 
-export { IssuesPage };
+export { IssuesViewWrapper };

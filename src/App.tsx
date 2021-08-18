@@ -2,8 +2,8 @@ import { Route, BrowserRouter, Switch } from "react-router-dom";
 import { I18nProvider } from "./i18n/I18nProvider";
 
 import { Landing } from "./pages/Landing";
-import { IssuesPage } from "./pages/IssuesPage";
-import { IssueDetailsPage } from "./pages/IssueDetailsPage";
+import { IssuesViewWrapper } from "./pages/IssuesViewWrapper";
+import { IssueDetailsViewWrapper } from "./pages/IssueDetailsViewWrapper";
 
 function App() {
   return (
@@ -13,12 +13,12 @@ function App() {
           <Route
             exact
             path="/:organization/:repository"
-            component={IssuesPage}
+            component={IssuesViewWrapper}
           />
           <Route
             exact
             path="/:organization/:repository/issues/:number"
-            component={IssueDetailsPage}
+            component={IssueDetailsViewWrapper}
           />
           <Route exact path="/" component={Landing} />
         </Switch>

@@ -8,7 +8,7 @@ import {
 import { useNumericSearchParam } from "../../hooks/useNumericSearchParam";
 import { useSearchParam } from "../../hooks/useSearchParam";
 
-const useIssuesPageQueryParams = () => {
+const useIssuesQueryParams = () => {
   const {
     location: { search },
   } = useHistory();
@@ -45,4 +45,4 @@ const useIssuesPageQueryParams = () => {
   };
 };
 
-export { useIssuesPageQueryParams };
+export { useIssuesQueryParams };

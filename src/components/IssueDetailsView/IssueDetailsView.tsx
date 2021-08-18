@@ -130,7 +130,7 @@ interface Props {
   backLink: LocationDescriptor;
 }
 
-const IssueView = ({
+const IssueDetailsView = ({
   issueNumber,
   title,
   user,
@@ -237,4 +237,4 @@ const IssueView = ({
   );
 };
 
-export { IssueView };
+export { IssueDetailsView };

@@ -5,11 +5,11 @@ import { Header } from "../components/Header";
 import { useFetch } from "../hooks/useFetch";
 import { octokitClient } from "../octokitClient";
 import { getTotalPagesFromLink, isDefined } from "../utils";
-import { IssueView } from "../components/IssueView";
+import { IssueDetailsView } from "../components/IssueDetailsView";
 import { useNumericSearchParam } from "../hooks/useNumericSearchParam";
 import { useEffect } from "react";
 
-const IssueDetailsPage = ({
+const IssueDetailsViewWrapper = ({
   match: {
     params: { number, organization, repository },
   },
@@ -74,7 +74,7 @@ const IssueDetailsPage = ({
   return (
     <>
       <Header />
-      <IssueView
+      <IssueDetailsView
         backLink={`/${organization}/${repository}`}
         isLoading={isLoading}
         isLoadingComments={loadingComments}
@@ -131,4 +131,4 @@ const IssueDetailsPage = ({
   );
 };
 
-export { IssueDetailsPage };
+export { IssueDetailsViewWrapper };
