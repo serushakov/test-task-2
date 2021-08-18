@@ -9,5 +9,7 @@
   "issue-view.back-link-label": "Go back",
   "issue-view.bookmark-button-label": "Bookmark issue",
   "issue-view.empty-body": "No description provided",
-  "header.switch-repo-link": "Choose another repository"
+  "header.switch-repo-link": "Choose another repository",
+  "bookmarked-issues.title": "Bookmarked issues",
+  "bookmarked-issues.empty-message": "Nothing bookmarked yet"
 }

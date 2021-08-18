@@ -74,7 +74,7 @@ const GlobalStyle = createGlobalStyle`
       --side-padding: 1rem;
     }
 
-    --content-width: 1200px;
+    --content-width: 1400px;
 
     --text-color: rgb(32,33,37);
     --surface-color: #ffffff;

@@ -1,3 +1,5 @@
+import { LocationDescriptor } from "history";
+
 export enum IssueStateFilter {
   open = "open",
   closed = "closed",
@@ -33,3 +35,9 @@ export type ReactionType =
   | "heart"
   | "eyes"
   | "rocket";
+
+export type BookmarkedIssue = {
+  link: LocationDescriptor;
+  name: string;
+  number: string;
+};

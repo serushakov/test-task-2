@@ -9,6 +9,9 @@ import { IssuesView } from "../../components/IssuesView/IssuesView";
 
 import { useIssuesQueryParams } from "./useIssuesQueryParams";
 import { useTotalPages } from "./useTotalPages";
+import { constructIssueUrl } from "../../utils";
+import { BookmarkedIssue } from "../../common";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 type Props = RouteComponentProps<{
   organization: string;
@@ -74,7 +77,8 @@ const IssuesViewWrapper = ({
     }
   }, [page, pages]);
 
-  console.log(page, pages);
+  const [bookmarkedIssues] =
+    useLocalStorage<Array<BookmarkedIssue>>("bookmarked_issues");
 
   return (
     <>
@@ -96,7 +100,7 @@ const IssuesViewWrapper = ({
             state,
             author: user?.login ?? "unknown",
             link: {
-              pathname: `/${organization}/${repository}/issues/${number}`,
+              pathname: constructIssueUrl(organization, repository, number),
               state: {
                 search: search,
               },
@@ -104,6 +108,7 @@ const IssuesViewWrapper = ({
             date: new Date(created_at),
           })
         )}
+        bookmarkedIssues={bookmarkedIssues ?? undefined}
         isLoading={isLoading}
         stateFilter={stateFilter}
         onStateFilterChange={handleQueryParamChangeCreator("stateFilter")}

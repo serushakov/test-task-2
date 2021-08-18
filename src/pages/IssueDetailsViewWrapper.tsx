@@ -1,14 +1,16 @@
+import { useEffect } from "react";
+import { useIntl } from "react-intl";
 import { RouteComponentProps } from "react-router-dom";
 import { omit } from "lodash";
 
 import { Header } from "../components/Header";
 import { useFetch } from "../hooks/useFetch";
 import { octokitClient } from "../octokitClient";
-import { getTotalPagesFromLink, isDefined } from "../utils";
+import { constructIssueUrl, getTotalPagesFromLink, isDefined } from "../utils";
 import { IssueDetailsView } from "../components/IssueDetailsView";
 import { useNumericSearchParam } from "../hooks/useNumericSearchParam";
-import { useEffect } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { BookmarkedIssue } from "../common";
 
 const IssueDetailsViewWrapper = ({
   match: {
@@ -25,6 +27,7 @@ const IssueDetailsViewWrapper = ({
   any,
   { search: string }
 >) => {
+  const intl = useIntl();
   const page = useNumericSearchParam("page", search, 1);
 
   useEffect(() => {
@@ -73,23 +76,42 @@ const IssueDetailsViewWrapper = ({
   );
 
   const [bookmarkedIssues, setBookmarkedIssues] =
-    useLocalStorage<Array<string>>("bookmarked_issues");
+    useLocalStorage<Array<BookmarkedIssue>>("bookmarked_issues");
 
   const isBookmarked = bookmarkedIssues
-    ? bookmarkedIssues.includes(number)
+    ? bookmarkedIssues.some((issue) => issue.number === number)
     : false;
 
   return (
     <>
-      <Header />
+      <Header
+        links={[
+          {
+            label: intl.formatMessage({ id: "header.switch-repo-link" }),
+            to: { pathname: "/" },
+          },
+        ]}
+      />
       <IssueDetailsView
         body={issue?.body}
         isBookmarked={isBookmarked}
         onBookmarkClick={() =>
+          issue &&
           setBookmarkedIssues(
             isBookmarked
-              ? bookmarkedIssues?.filter((issue) => issue !== number) ?? null
-              : [...(bookmarkedIssues ?? []), number]
+              ? bookmarkedIssues?.filter(
+                  (issue) =>
+                    issue.link !==
+                    constructIssueUrl(organization, repository, number)
+                ) ?? null
+              : [
+                  ...(bookmarkedIssues ?? []),
+                  {
+                    name: issue.title,
+                    number: number,
+                    link: constructIssueUrl(organization, repository, number),
+                  },
+                ]
           )
         }
         backLink={`/${organization}/${repository}?${state?.search}`}

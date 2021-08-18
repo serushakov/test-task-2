@@ -102,7 +102,7 @@ const Body = styled.div`
 `;
 
 const EmptyBodyContent = styled.p`
-  font-family: italic;
+  font-style: italic;
   color: rgba(32, 33, 37, 0.64);
 `;
 

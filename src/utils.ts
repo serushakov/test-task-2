@@ -43,3 +43,14 @@ export const getTotalPagesFromLink = (link: string) => {
 export const isDefined = <T extends unknown>(
   optional: T
 ): optional is NonNullable<T> => optional !== null && optional !== undefined;
+
+export const constructIssueUrl = (
+  organization: string,
+  repository: string,
+  number: string | number
+) => `/${organization}/${repository}/issues/${number}`;
+
+export const constructIssuesViewUrl = (
+  organization: string,
+  repository: string
+) => `/${organization}/${repository}`;
