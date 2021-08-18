@@ -13,6 +13,7 @@ const GlobalStyle = createGlobalStyle`
   ${reset}
 
   html {
+    height: 100%;
     font-size: 16px;
     @media screen and (max-width: ${MOBILE_WIDTH}px) {
       font-size: 12px;

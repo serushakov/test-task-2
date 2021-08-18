@@ -8,18 +8,23 @@ import { getTotalPagesFromLink, isDefined } from "../utils";
 import { IssueDetailsView } from "../components/IssueDetailsView";
 import { useNumericSearchParam } from "../hooks/useNumericSearchParam";
 import { useEffect } from "react";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const IssueDetailsViewWrapper = ({
   match: {
     params: { number, organization, repository },
   },
   history: { action },
-  location: { search },
-}: RouteComponentProps<{
-  organization: string;
-  repository: string;
-  number: string;
-}>) => {
+  location: { search, state },
+}: RouteComponentProps<
+  {
+    organization: string;
+    repository: string;
+    number: string;
+  },
+  any,
+  { search: string }
+>) => {
   const page = useNumericSearchParam("page", search, 1);
 
   useEffect(() => {
@@ -67,15 +72,26 @@ const IssueDetailsViewWrapper = ({
     }
   );
 
-  data?.comments.forEach(
-    (comment) => !comment.body && console.log("FOUND ONE!!!!!!!!", comment)
-  );
+  const [bookmarkedIssues, setBookmarkedIssues] =
+    useLocalStorage<Array<string>>("bookmarked_issues");
+
+  const isBookmarked = bookmarkedIssues
+    ? bookmarkedIssues.includes(number)
+    : false;
 
   return (
     <>
       <Header />
       <IssueDetailsView
-        backLink={`/${organization}/${repository}`}
+        isBookmarked={isBookmarked}
+        onBookmarkClick={() =>
+          setBookmarkedIssues(
+            isBookmarked
+              ? bookmarkedIssues?.filter((issue) => issue !== number) ?? null
+              : [...(bookmarkedIssues ?? []), number]
+          )
+        }
+        backLink={`/${organization}/${repository}?${state?.search}`}
         isLoading={isLoading}
         isLoadingComments={loadingComments}
         issueNumber={number}

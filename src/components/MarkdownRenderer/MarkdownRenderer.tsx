@@ -4,6 +4,10 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styled from "styled-components";
 
+const StyledReactMarkdown = styled(ReactMarkdown)`
+  word-break: break-word;
+`;
+
 const Link = styled.a`
   text-decoration: none;
   color: var(--primary-color);
@@ -47,7 +51,7 @@ interface Props {
 
 const MarkdownRenderer = ({ source }: Props) => {
   return (
-    <ReactMarkdown
+    <StyledReactMarkdown
       components={{
         a: Link,
         blockquote: BlockQuote,
@@ -58,7 +62,7 @@ const MarkdownRenderer = ({ source }: Props) => {
       remarkPlugins={[remarkGfm]}
     >
       {source}
-    </ReactMarkdown>
+    </StyledReactMarkdown>
   );
 };
 

@@ -1,14 +1,14 @@
-import { FormattedDate, FormattedMessage } from "react-intl";
+import { FormattedDate, FormattedMessage, useIntl } from "react-intl";
 import styled from "styled-components";
 import { parseToHsl } from "polished";
+import { ArrowLeft, Bookmark, Loader } from "react-feather";
+import { LocationDescriptor } from "history";
+import { Link } from "react-router-dom";
 
 import { ReactionType, User } from "../../common";
 import { getMessageId } from "../../i18n/getMessageId";
 import { Comment } from "../Comment/Comment";
-import { Loader } from "react-feather";
-import { LocationDescriptor } from "history";
 import { Pagination } from "../Pagination";
-import { Link } from "react-router-dom";
 
 const PageContent = styled.div`
   flex: 1;
@@ -24,10 +24,20 @@ const PageContent = styled.div`
 const BackLink = styled(Link)`
   text-decoration: none;
   color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 2rem;
 
   &:hover {
     color: var(--primary-color);
   }
+`;
+
+const TitleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
 `;
 
 const Title = styled.h1`
@@ -107,6 +117,13 @@ const PaginationSlot = styled.div`
   justify-content: center;
 `;
 
+const BookmarkButton = styled.button<{ isBookmarked: boolean }>`
+  padding: 0.5rem;
+
+  color: ${({ isBookmarked }) =>
+    isBookmarked ? "var(--warning-color)" : "var(--text-color)"};
+`;
+
 interface Props {
   issueNumber: string;
   title: string | undefined;
@@ -128,6 +145,8 @@ interface Props {
   totalPages: number | undefined;
   pageLinkCreator: (page: number) => LocationDescriptor;
   backLink: LocationDescriptor;
+  isBookmarked: boolean;
+  onBookmarkClick: () => void;
 }
 
 const IssueDetailsView = ({
@@ -143,7 +162,11 @@ const IssueDetailsView = ({
   pageLinkCreator,
   totalPages,
   backLink,
+  onBookmarkClick,
+  isBookmarked,
 }: Props) => {
+  const intl = useIntl();
+
   if (isLoading) {
     return (
       <PageContent>
@@ -156,12 +179,27 @@ const IssueDetailsView = ({
 
   return (
     <PageContent>
-      <BackLink to={backLink} />
-      <Title>
-        {title}
-        <IssueNumber>#{issueNumber}</IssueNumber>
-      </Title>
+      <BackLink to={backLink}>
+        <ArrowLeft size="16" />
+        <FormattedMessage id={getMessageId("issue-view.back-link-label")} />
+      </BackLink>
 
+      <TitleRow>
+        <Title>
+          {title}
+          <IssueNumber>#{issueNumber}</IssueNumber>
+        </Title>
+
+        <BookmarkButton
+          isBookmarked={isBookmarked}
+          onClick={onBookmarkClick}
+          aria-label={intl.formatMessage({
+            id: getMessageId("issue-view.bookmark-button-label"),
+          })}
+        >
+          <Bookmark size="32" fill={isBookmarked ? "currentColor" : "none"} />
+        </BookmarkButton>
+      </TitleRow>
       <IssueInfoRow>
         <FormattedMessage
           id={getMessageId("issue-view.created-by")}
@@ -224,7 +262,7 @@ const IssueDetailsView = ({
           )}
         </Comments>
       )}
-      {comments && totalPages && (
+      {comments && totalPages !== undefined && totalPages > 1 && (
         <PaginationSlot>
           <Pagination
             page={page}

@@ -95,7 +95,12 @@ const IssuesViewWrapper = ({
             comments,
             state,
             author: user?.login ?? "unknown",
-            link: `/${organization}/${repository}/issues/${number}`,
+            link: {
+              pathname: `/${organization}/${repository}/issues/${number}`,
+              state: {
+                search: search,
+              },
+            },
             date: new Date(created_at),
           })
         )}

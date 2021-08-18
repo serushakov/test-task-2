@@ -36,9 +36,10 @@ const Select = <T extends string | number = string>({
       onChange={(event) => onChange(event.target.value as T)}
       value={value}
       aria-labelledby={ariaLabelledBy}
+      defaultValue="__PLACEHOLDER"
     >
       {placeholder && (
-        <option disabled selected>
+        <option disabled value="__PLACEHOLDER">
           {placeholder}
         </option>
       )}

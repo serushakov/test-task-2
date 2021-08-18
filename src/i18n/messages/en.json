@@ -6,5 +6,7 @@
   "issues-table.title": "Issues",
   "issue-view.created-by": "Opened by {author} on {date}",
   "issue-view.comment.unknown-user": "unknown",
+  "issue-view.back-link-label": "Go back",
+  "issue-view.bookmark-button-label": "Bookmark issue",
   "header.switch-repo-link": "Choose another repository"
 }
