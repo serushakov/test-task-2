@@ -84,16 +84,6 @@ const StyledLoader = styled(Loader)`
       opacity: 1;
     }
   }
-
-  @keyframes rotate {
-    0% {
-      transform: translate(0, -50%) rotate(0deg);
-    }
-
-    100% {
-      transform: translate(0, -50%) rotate(360deg);
-    }
-  }
 `;
 
 const ErrorIcon = styled(X)`

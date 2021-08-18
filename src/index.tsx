@@ -1,4 +1,4 @@
-import { lighten, transparentize } from "polished";
+import { lighten } from "polished";
 import React from "react";
 import ReactDOM from "react-dom";
 import { createGlobalStyle } from "styled-components";
@@ -76,6 +76,16 @@ const GlobalStyle = createGlobalStyle`
     --error-color: #E55934;
     --success-color: #9BC53D;
     --warning-color: #FA7921;
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: translate(0, -50%) rotate(0deg);
+    }
+
+    100% {
+      transform: translate(0, -50%) rotate(360deg);
+    }
   }
 `;
 

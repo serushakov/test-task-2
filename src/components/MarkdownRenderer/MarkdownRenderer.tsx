@@ -42,10 +42,10 @@ const Code = styled.code<{ className?: string }>`
 `;
 
 interface Props {
-  body: string;
+  source: string;
 }
 
-const Body = ({ body }: Props) => {
+const MarkdownRenderer = ({ source }: Props) => {
   return (
     <ReactMarkdown
       components={{
@@ -57,9 +57,9 @@ const Body = ({ body }: Props) => {
       }}
       remarkPlugins={[remarkGfm]}
     >
-      {body}
+      {source}
     </ReactMarkdown>
   );
 };
 
-export { Body };
+export { MarkdownRenderer };

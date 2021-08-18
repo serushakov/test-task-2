@@ -39,3 +39,7 @@ export const getTotalPagesFromLink = (link: string) => {
     return undefined;
   }
 };
+
+export const isDefined = <T extends unknown>(
+  optional: T
+): optional is NonNullable<T> => optional !== null && optional !== undefined;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ReactionType } from "./types";
+import { ReactionType } from "../../common";
 
 const Root = styled.span``;
 

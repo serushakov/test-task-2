@@ -1,11 +1,11 @@
 import { FormattedDate, FormattedMessage } from "react-intl";
 import styled from "styled-components";
+import { ReactionType, User } from "../../common";
 
 import { getMessageId } from "../../i18n/getMessageId";
+import { MarkdownRenderer } from "../MarkdownRenderer";
 
-import { Body } from "./Body";
 import { Reaction } from "./Reaction";
-import { ReactionType } from "./types";
 
 const Root = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const Avatar = styled.img`
   border-radius: 50%;
 `;
 
-const User = styled.a`
+const UserLink = styled.a`
   display: flex;
   width: fit-content;
   gap: 0.5rem;
@@ -108,34 +108,24 @@ const Reactions = styled.div`
 `;
 
 interface Props {
-  avatarImgUrl: string | undefined;
+  user?: User;
   createdAt: string;
-  username: string | undefined;
-  userLink: string | undefined;
   body: string;
-  reactions: Record<ReactionType, number> | undefined;
+  reactions?: Record<ReactionType, number>;
 }
 
-const Comment = ({
-  avatarImgUrl,
-  body,
-  username,
-  userLink,
-  reactions,
-  createdAt,
-}: Props) => {
-  console.log(reactions);
+const Comment = ({ body, user, reactions, createdAt }: Props) => {
   return (
     <Root>
-      <User href={userLink} target="_blank">
-        {avatarImgUrl ? (
-          <Avatar src={avatarImgUrl} />
+      <UserLink href={user?.url} target="_blank">
+        {user?.avatarUrl ? (
+          <Avatar src={user.avatarUrl} />
         ) : (
           <EmptyAvatar>?</EmptyAvatar>
         )}
         <UsernameDate>
           <Username>
-            {username ?? (
+            {user?.login ?? (
               <FormattedMessage
                 id={getMessageId("issue-view.comment.unknown-user")}
               />
@@ -151,10 +141,10 @@ const Comment = ({
             />
           </Date>
         </UsernameDate>
-      </User>
+      </UserLink>
 
       <Bubble>
-        <Body body={body} />
+        <MarkdownRenderer source={body} />
         <Reactions>
           {reactions &&
             Object.entries(reactions).map(

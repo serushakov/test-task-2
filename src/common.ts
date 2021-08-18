@@ -17,3 +17,19 @@ export enum IssueSortingDirection {
 
 export const ITEMS_PER_PAGE_VARIANTS = [10, 20, 30, 50, 100];
 export const DEFAULT_ITEMS_PER_PAGE = ITEMS_PER_PAGE_VARIANTS[2];
+
+export type User = {
+  url?: string;
+  avatarUrl?: string;
+  login: string;
+};
+
+export type ReactionType =
+  | "+1"
+  | "-1"
+  | "laugh"
+  | "confused"
+  | "hooray"
+  | "heart"
+  | "eyes"
+  | "rocket";

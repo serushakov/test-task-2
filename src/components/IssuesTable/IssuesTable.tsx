@@ -58,19 +58,9 @@ const IssueListItem = styled.li`
 const LoadingSpinner = styled(Loader)`
   color: rgba(32, 33, 37, 0.64);
   align-self: center;
-  animation: spin 1s linear infinite;
+  animation: rotate 1s linear infinite;
   width: 2rem;
   height: 2rem;
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 `;
 
 const IssueItemLoader = styled.div`
