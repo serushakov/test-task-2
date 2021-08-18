@@ -10,6 +10,8 @@ App has 3 pages:
 
 App allows finding repositories and browsing their issues. Issues can be bookmarked.
 
+App should work well both on desktop and on mobile platforms.
+
 ## Available Scripts
 
 In the project directory, you can run:
